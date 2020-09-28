@@ -1,4 +1,4 @@
-import 'package:yelpexplorer/domain/model/review.dart';
+import "package:yelpexplorer/domain/model/review.dart";
 
 class Business {
   String id;
@@ -28,21 +28,21 @@ class Business {
   );
 
   Business.fromJson(Map<String, dynamic> json) {
-    List<String> categories = [];
-    for (var category in json['categories']) {
-      categories.add(category['title']);
+    List<String> categoryList = [];
+    for (var category in json["categories"]) {
+      categoryList.add(category["title"]);
     }
 
     Business(
-      id = json['id'],
-      name = json['name'],
-      photoUrl = json['photoUrl'],
-      rating = json['rating'],
-      reviewCount = json['reviewCount'],
-      address = json['address'],
-      price = json['price'],
-      categories = categories,
-      phone = json['phone'],
+      id = json["id"],
+      name = json["name"],
+      photoUrl = json["image_url"],
+      rating = json["rating"],
+      reviewCount = json["review_count"],
+      address = json["location"]["address1"] + ", " + json["location"]["city"],
+      price = json["price"] ?? "",
+      categories = categoryList,
+      phone = json["phone"],
       hours = null,
       reviews = null,
     );

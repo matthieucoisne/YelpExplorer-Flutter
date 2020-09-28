@@ -1,22 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:yelpexplorer/presentation/business_list_page.dart';
+import 'package:yelpexplorer/presentation/business_list_screen.dart';
 
-void main() {
-  runApp(YelpExplorer());
-}
+void main() => runApp(YelpExplorer());
 
 class YelpExplorer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
-        primarySwatch: Colors.blue,
-        // This makes the visual density adapt to the platform that you run
-        // the app on. For desktop platforms, the controls will be smaller and
-        // closer together (more dense) than on mobile platforms.
-        visualDensity: VisualDensity.adaptivePlatformDensity,
+        brightness: Brightness.dark,
+        primaryColor: Colors.red[700],
+        accentColor: Colors.red[400],
       ),
-      home: BusinessListPage(),
+      home: BusinessListScreen(),
     );
   }
 }
