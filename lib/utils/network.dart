@@ -13,14 +13,14 @@ class NetworkHelper {
     http.Response response = await http.get(
       url,
       headers: {
-        HttpHeaders.authorizationHeader: "Bearer ${Const.API_KEY}"
+        HttpHeaders.authorizationHeader: "Bearer ${Const.API_KEY}",
       },
     );
 
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
     } else {
-      print(response.statusCode);
+      print(response.statusCode); // TODO improve
     }
   }
 }
