@@ -57,9 +57,7 @@ class BusinessList extends StatelessWidget {
       );
     } else {
       return ListView.builder(
-        itemBuilder: (context, index) {
-          return BusinessListItem(data[index], index + 1);
-        },
+        itemBuilder: (context, index) => BusinessListItem(data[index], index + 1),
         itemCount: data.length,
       );
     }
@@ -99,7 +97,6 @@ class BusinessListItem extends StatelessWidget {
         child: Container(
           height: cardHeight,
           child: Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               ClipRRect(
                 borderRadius: BorderRadius.only(
@@ -135,7 +132,7 @@ class BusinessListItem extends StatelessWidget {
                           Container(
                             margin: EdgeInsets.only(left: 8.0),
                             child: Text(
-                              "${business.reviewCount} reviews",
+                              "${business.reviewCount} reviews", // TODO i18n
                               style: textStyle,
                             ),
                           )
