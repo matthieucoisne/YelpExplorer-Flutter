@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:yelpexplorer/data/repository/business_data_repository.dart';
 import 'package:yelpexplorer/domain/model/business.dart';
+import 'package:yelpexplorer/presentation/business_details_screen.dart';
 import 'package:yelpexplorer/utils/stars_provider.dart' as StarsProvider;
 
 class BusinessListScreen extends StatefulWidget {
@@ -10,8 +11,8 @@ class BusinessListScreen extends StatefulWidget {
 }
 
 class _BusinessListScreenState extends State<BusinessListScreen> {
-  List<Business> data = List();
-  bool isLoading = false;
+  List<Business> businessList;
+  bool isLoading;
 
   @override
   void initState() {
@@ -21,10 +22,10 @@ class _BusinessListScreenState extends State<BusinessListScreen> {
   }
 
   void getData() async {
-    var data = await BusinessDataRepository().getBusinessList();
+    var businessList = await BusinessDataRepository().getBusinessList();
     setState(() {
       isLoading = false;
-      this.data = data;
+      this.businessList = businessList;
     });
   }
 
@@ -34,16 +35,17 @@ class _BusinessListScreenState extends State<BusinessListScreen> {
       appBar: AppBar(
         title: Text("YelpExplorer-Flutter"),
       ),
-      body: BusinessList(data, isLoading),
+      body: BusinessList(businessList, isLoading),
     );
   }
 }
 
 class BusinessList extends StatelessWidget {
-  final List<Business> data;
+  final List<Business> businessList;
   final bool isLoading;
+  final double loaderSize = 24.0;
 
-  BusinessList(this.data, this.isLoading);
+  BusinessList(this.businessList, this.isLoading);
 
   @override
   Widget build(BuildContext context) {
@@ -51,14 +53,14 @@ class BusinessList extends StatelessWidget {
       return Center(
         child: SizedBox(
           child: CircularProgressIndicator(),
-          height: 24.0,
-          width: 24.0,
+          height: loaderSize,
+          width: loaderSize,
         ),
       );
     } else {
       return ListView.builder(
-        itemBuilder: (context, index) => BusinessListItem(data[index], index + 1),
-        itemCount: data.length,
+        itemBuilder: (context, index) => BusinessListItem(businessList[index], index + 1),
+        itemCount: businessList.length,
       );
     }
   }
@@ -89,10 +91,13 @@ class BusinessListItem extends StatelessWidget {
         borderRadius: BorderRadius.circular(6.0),
       ),
       child: InkWell(
-        onTap: () => {
-          Scaffold.of(context).showSnackBar(SnackBar(
-            content: Text("${business.name}"),
-          )),
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => BusinessDetailsScreen(business.id),
+            ),
+          );
         },
         child: Container(
           height: cardHeight,
@@ -106,9 +111,14 @@ class BusinessListItem extends StatelessWidget {
                 child: FadeInImage.memoryNetwork(
                   placeholder: kTransparentImage,
                   image: business.photoUrl,
-                  height: cardHeight,
                   width: cardHeight,
-                  fit: BoxFit.fill,
+                  height: cardHeight,
+                  fit: BoxFit.cover,
+                  imageErrorBuilder: (context, url, error) => Image(
+                    image: AssetImage("assets/placeholder_business_list.png"),
+                    width: cardHeight,
+                    height: cardHeight,
+                  ),
                 ),
               ),
               Expanded(
@@ -119,8 +129,10 @@ class BusinessListItem extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Text(
-                        "$index. ${business.name}",
+                        "$index. ${business.name.toUpperCase()}",
                         style: TextStyle(fontWeight: FontWeight.bold),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
                       ),
                       Row(
                         children: [
@@ -145,6 +157,8 @@ class BusinessListItem extends StatelessWidget {
                       Text(
                         business.address,
                         style: textStyle,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
                       ),
                     ],
                   ),
