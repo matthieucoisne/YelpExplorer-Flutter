@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:transparent_image/transparent_image.dart';
-import 'package:yelpexplorer/data/repository/business_data_repository.dart';
-import 'package:yelpexplorer/domain/model/business.dart';
-import 'package:yelpexplorer/presentation/business_details_screen.dart';
-import 'package:yelpexplorer/utils/stars_provider.dart' as StarsProvider;
+import 'package:yelpexplorer/core/utils/stars_provider.dart' as StarsProvider;
+import 'package:yelpexplorer/features/business/data/datasource/remote/rest/business_rest_datasource.dart';
+import 'package:yelpexplorer/features/business/data/repository/rest/business_rest_data_repository.dart';
+import 'package:yelpexplorer/features/business/domain/model/business.dart';
+import 'package:yelpexplorer/features/business/domain/repository/rest/business_rest_repository.dart';
+import 'package:yelpexplorer/features/business/domain/usecase/get_business_list_usecase.dart';
+import 'package:yelpexplorer/features/business/domain/usecase/rest/get_business_list_rest_usecase.dart';
+import 'package:yelpexplorer/features/business/presentation/screen/business_details_screen.dart';
 
 class BusinessListScreen extends StatefulWidget {
   @override
@@ -11,7 +16,7 @@ class BusinessListScreen extends StatefulWidget {
 }
 
 class _BusinessListScreenState extends State<BusinessListScreen> {
-  List<Business> businessList;
+  List<Business> businesses;
   bool isLoading;
 
   @override
@@ -22,10 +27,24 @@ class _BusinessListScreenState extends State<BusinessListScreen> {
   }
 
   void getData() async {
-    var businessList = await BusinessDataRepository().getBusinessList();
+    // TODO manage this with DI
+    BusinessRestRepository repository = BusinessRestDataRepository(BusinessRestDataSource(http.Client()));
+    GetBusinessListUseCase getBusinessListUseCase;
+    if (true) {
+      getBusinessListUseCase = GetBusinessListRestUseCase(repository);
+    } else {
+      // TODO GraphQL
+    }
+
+    List<Business> businesses = await getBusinessListUseCase.execute(
+      term: "sushi",
+      location: "montreal",
+      sortBy: "rating",
+      limit: 20,
+    );
     setState(() {
-      isLoading = false;
-      this.businessList = businessList;
+      this.isLoading = false;
+      this.businesses = businesses;
     });
   }
 
@@ -35,7 +54,7 @@ class _BusinessListScreenState extends State<BusinessListScreen> {
       appBar: AppBar(
         title: Text("YelpExplorer-Flutter"),
       ),
-      body: BusinessList(businessList, isLoading),
+      body: BusinessList(businesses, isLoading),
     );
   }
 }
@@ -81,7 +100,7 @@ class BusinessListItem extends StatelessWidget {
     } else {
       separator = "";
     }
-    return "${business.price}$separator${business.categories.join(",")}";
+    return "${business.price}$separator${business.categories.join(", ")}";
   }
 
   @override
@@ -110,7 +129,7 @@ class BusinessListItem extends StatelessWidget {
                 ),
                 child: FadeInImage.memoryNetwork(
                   placeholder: kTransparentImage,
-                  image: business.photoUrl,
+                  image: business.imageUrl,
                   width: cardHeight,
                   height: cardHeight,
                   fit: BoxFit.cover,

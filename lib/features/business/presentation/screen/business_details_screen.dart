@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:transparent_image/transparent_image.dart';
-import 'package:yelpexplorer/data/repository/business_data_repository.dart';
-import 'package:yelpexplorer/domain/model/business.dart';
-import 'package:yelpexplorer/domain/model/review.dart';
-import 'package:yelpexplorer/utils/const.dart' as Const;
-import 'package:yelpexplorer/utils/stars_provider.dart' as StarsProvider;
+import 'package:yelpexplorer/core/utils/const.dart' as Const;
+import 'package:yelpexplorer/core/utils/stars_provider.dart' as StarsProvider;
+import 'package:yelpexplorer/features/business/data/datasource/remote/rest/business_rest_datasource.dart';
+import 'package:yelpexplorer/features/business/data/repository/rest/business_rest_data_repository.dart';
+import 'package:yelpexplorer/features/business/domain/model/business.dart';
+import 'package:yelpexplorer/features/business/domain/model/review.dart';
+import 'package:yelpexplorer/features/business/domain/repository/rest/business_rest_repository.dart';
+import 'package:yelpexplorer/features/business/domain/usecase/get_business_details_usecase.dart';
+import 'package:yelpexplorer/features/business/domain/usecase/rest/get_business_details_rest_usecase.dart';
 
 class BusinessDetailsScreen extends StatefulWidget {
   final String businessId;
@@ -27,11 +32,20 @@ class _BusinessDetailsScreenState extends State<BusinessDetailsScreen> {
   }
 
   void getData() async {
-    var business = await BusinessDataRepository().getBusinessDetails(widget.businessId);
-    var reviews = await BusinessDataRepository().getBusinessReviews(widget.businessId);
-    business.reviews = reviews;
+    // TODO manage this with DI
+    BusinessRestRepository repository = BusinessRestDataRepository(BusinessRestDataSource(http.Client()));
+    GetBusinessDetailsUseCase getBusinessDetailsUseCase;
+    if (true) {
+      getBusinessDetailsUseCase = GetBusinessDetailsRestUseCase(repository);
+    } else {
+      // TODO GraphQL
+    }
+
+    Business business = await getBusinessDetailsUseCase.execute(
+      businessId: widget.businessId,
+    );
     setState(() {
-      isLoading = false;
+      this.isLoading = false;
       this.business = business;
     });
   }
@@ -71,7 +85,7 @@ class BusinessDetails extends StatelessWidget {
           children: [
             FadeInImage.memoryNetwork(
               placeholder: kTransparentImage,
-              image: business.photoUrl,
+              image: business.imageUrl,
               height: photoSize,
               fit: BoxFit.cover,
               imageErrorBuilder: (context, url, error) => Image(
@@ -101,13 +115,14 @@ class BusinessInfo extends StatelessWidget {
   BusinessInfo(this.business);
 
   String getPriceAndCategories() {
+    // DRY - there is the same function in the business list
     String separator;
     if (business.price.isNotEmpty && business.categories.length > 0) {
       separator = "\u0020\u0020\u2022\u0020\u0020";
     } else {
       separator = "";
     }
-    return "${business.price}$separator${business.categories.join(",")}";
+    return "${business.price}$separator${business.categories.join(", ")}";
   }
 
   @override
@@ -171,7 +186,6 @@ class OpeningHours extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO move this elsewhere?
     final List<TableRow> tableRows = [];
     for (int i = 0; i < Const.days.length; i++) {
       final List<String> hoursOfDay = businessHours[i];
