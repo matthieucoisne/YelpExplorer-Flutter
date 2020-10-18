@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:yelpexplorer/presentation/business_list_screen.dart';
+import 'package:yelpexplorer/features/business/presentation/screen/business_list_screen.dart';
 
 void main() => runApp(YelpExplorer());
 
