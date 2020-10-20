@@ -1,15 +1,16 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
-import 'package:yelpexplorer/features/business/domain/model/business.dart';
-import 'package:yelpexplorer/features/business/domain/repository/rest/business_rest_repository.dart';
-import 'package:yelpexplorer/features/business/domain/usecase/get_business_list_usecase.dart';
-import 'package:yelpexplorer/features/business/domain/usecase/rest/get_business_list_rest_usecase.dart';
+import 'package:yelpexplorer/features/business/domain/common/model/business.dart';
+import 'package:yelpexplorer/features/business/domain/common/usecase/get_business_list_usecase.dart';
+import 'package:yelpexplorer/features/business/domain/rest/repository/business_rest_repository.dart';
+import 'package:yelpexplorer/features/business/domain/rest/usecase/get_business_list_rest_usecase.dart';
 
 class BusinessMockRepository extends Mock implements BusinessRestRepository {}
 
 void main() {
   GetBusinessListUseCase usecase;
   BusinessMockRepository mockRepository;
+
   final Business fakeBusiness = Business(
     id: "id",
     name: "name",
@@ -19,7 +20,6 @@ void main() {
     address: "address",
     price: "price",
     categories: ["category"],
-    phone: "phone",
     hours: null,
     reviews: null,
   );
@@ -31,14 +31,18 @@ void main() {
   });
 
   test(
-    "should get the business list from the repository",
+    "should get the business list from the GetBusinessListRestUseCase",
     () async {
+      // Arrange
       final String term = "sushi";
       final String location = "montreal";
       final String sortBy = "rating";
-      final int limit = 10;
-      when(mockRepository.getBusinessList(any, any, any, any)).thenAnswer((_) async => fakeBusinesses);
+      final int limit = 20;
+      when(mockRepository.getBusinessList(any, any, any, any)).thenAnswer(
+        (_) async => fakeBusinesses,
+      );
 
+      // Act
       final result = await usecase.execute(
         term: term,
         location: location,
@@ -46,6 +50,7 @@ void main() {
         limit: limit,
       );
 
+      // Assert
       expect(result, fakeBusinesses);
       verify(mockRepository.getBusinessList(term, location, sortBy, limit));
       verifyNoMoreInteractions(mockRepository);

@@ -1,13 +1,13 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
-import 'package:yelpexplorer/features/business/domain/model/business.dart';
-import 'package:yelpexplorer/features/business/domain/model/review.dart';
-import 'package:yelpexplorer/features/business/domain/model/user.dart';
-import 'package:yelpexplorer/features/business/domain/repository/rest/business_rest_repository.dart';
-import 'package:yelpexplorer/features/business/domain/usecase/get_business_details_usecase.dart';
-import 'package:yelpexplorer/features/business/domain/usecase/rest/get_business_details_rest_usecase.dart';
+import 'package:yelpexplorer/features/business/domain/common/model/business.dart';
+import 'package:yelpexplorer/features/business/domain/common/model/review.dart';
+import 'package:yelpexplorer/features/business/domain/common/model/user.dart';
+import 'package:yelpexplorer/features/business/domain/common/usecase/get_business_details_usecase.dart';
+import 'package:yelpexplorer/features/business/domain/graphql/repository/business_graphql_repository.dart';
+import 'package:yelpexplorer/features/business/domain/graphql/usecase/get_business_details_graphql_usecase.dart';
 
-class BusinessMockRepository extends Mock implements BusinessRestRepository {}
+class BusinessMockRepository extends Mock implements BusinessGraphQLRepository {}
 
 void main() {
   GetBusinessDetailsUseCase usecase;
@@ -31,30 +31,30 @@ void main() {
     address: "address",
     price: "price",
     categories: ["category"],
-    phone: "phone",
     hours: null,
     reviews: fakeReviews,
   );
 
   setUp(() {
     mockRepository = BusinessMockRepository();
-    usecase = GetBusinessDetailsRestUseCase(mockRepository);
+    usecase = GetBusinessDetailsGraphQLUseCase(mockRepository);
   });
 
   test(
-    "should get the business details from the repository",
+    "should get the business details from the GetBusinessDetailsGraphQLUseCase",
     () async {
+      // Arrange
       final String businessId = "businessId";
       when(mockRepository.getBusinessDetails(any)).thenAnswer(
         (_) async => fakeBusiness,
       );
-      when(mockRepository.getBusinessReviews(any)).thenAnswer((_) async => fakeReviews);
 
+      // Act
       final result = await usecase.execute(businessId: businessId);
 
+      // Assert
       expect(result, fakeBusiness);
       verify(mockRepository.getBusinessDetails(businessId));
-      verify(mockRepository.getBusinessReviews(businessId));
       verifyNoMoreInteractions(mockRepository);
     },
   );
