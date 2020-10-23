@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:yelpexplorer/core/utils/injection.dart' as injection;
 import 'package:yelpexplorer/features/business/presentation/screen/business_list_screen.dart';
 
-void main() => runApp(YelpExplorer());
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  injection.setup();
+  return runApp(YelpExplorer());
+}
 
 class YelpExplorer extends StatelessWidget {
   @override
