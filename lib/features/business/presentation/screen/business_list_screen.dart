@@ -1,18 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:graphql_flutter/graphql_flutter.dart';
-import 'package:http/http.dart' as http;
 import 'package:transparent_image/transparent_image.dart';
 import 'package:yelpexplorer/core/utils/const.dart' as Const;
+import 'package:yelpexplorer/core/utils/injection.dart';
 import 'package:yelpexplorer/core/utils/stars_provider.dart' as StarsProvider;
-import 'package:yelpexplorer/features/business/data/graphql/datasource/remote/business_graphql_datasource.dart';
-import 'package:yelpexplorer/features/business/data/graphql/repository/business_graphql_data_repository.dart';
-import 'package:yelpexplorer/features/business/data/rest/datasource/remote/business_rest_datasource.dart';
-import 'package:yelpexplorer/features/business/data/rest/repository/business_rest_data_repository.dart';
 import 'package:yelpexplorer/features/business/domain/common/model/business.dart';
 import 'package:yelpexplorer/features/business/domain/common/usecase/get_business_list_usecase.dart';
-import 'package:yelpexplorer/features/business/domain/graphql/repository/business_graphql_repository.dart';
 import 'package:yelpexplorer/features/business/domain/graphql/usecase/get_business_list_graphql_usecase.dart';
-import 'package:yelpexplorer/features/business/domain/rest/repository/business_rest_repository.dart';
 import 'package:yelpexplorer/features/business/domain/rest/usecase/get_business_list_rest_usecase.dart';
 import 'package:yelpexplorer/features/business/presentation/screen/business_details_screen.dart';
 
@@ -33,23 +26,12 @@ class _BusinessListScreenState extends State<BusinessListScreen> {
   }
 
   void getData() async {
-    // TODO manage this with DI
-    bool rest = false;
+    // TODO
     GetBusinessListUseCase getBusinessListUseCase;
-    if (rest) {
-      BusinessRestRepository repository = BusinessRestDataRepository(BusinessRestDataSource(http.Client()));
-      getBusinessListUseCase = GetBusinessListRestUseCase(repository);
+    if (Const.USE_GRAPHQL) {
+      getBusinessListUseCase = getIt<GetBusinessListGraphQLUseCase>();
     } else {
-      final HttpLink httpLink = HttpLink(uri: Const.URL_GRAPHQL);
-      final AuthLink authLink = AuthLink(getToken: () => "Bearer ${Const.API_KEY}");
-      final Link link = authLink.concat(httpLink);
-      final GraphQLClient client = GraphQLClient(
-        cache: InMemoryCache(),
-        link: link,
-      );
-
-      BusinessGraphQLRepository repository = BusinessGraphQLDataRepository(BusinessGraphQLDataSource(client));
-      getBusinessListUseCase = GetBusinessListGraphQLUseCase(repository);
+      getBusinessListUseCase = getIt<GetBusinessListRestUseCase>();
     }
 
     List<Business> businesses = await getBusinessListUseCase.execute(

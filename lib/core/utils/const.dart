@@ -3,6 +3,8 @@ const URL_GRAPHQL = "https://api.yelp.com/v3/graphql";
 
 const API_KEY = "YOUR_API_KEY";
 
+const USE_GRAPHQL = true;
+
 const PATTERN_DATE_TIME = "yyyy-MM-dd HH:mm:ss";
 const PATTERN_DATE = "M/d/yyyy";
 const PATTERN_HOUR_MINUTE = "HHmm";
