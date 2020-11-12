@@ -43,12 +43,7 @@ void main() {
       );
 
       // Act
-      final result = await usecase.execute(
-        term: term,
-        location: location,
-        sortBy: sortBy,
-        limit: limit,
-      );
+      final result = await usecase.execute(term, location, sortBy, limit);
 
       // Assert
       expect(result, fakeBusinesses);

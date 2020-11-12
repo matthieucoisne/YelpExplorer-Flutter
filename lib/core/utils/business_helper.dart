@@ -25,3 +25,13 @@ AssetImage getRatingImage(num rating) {
   }
   return AssetImage(assetName);
 }
+
+String formatPriceAndCategories(String price, List<String> categories) {
+  String separator;
+  if (price.isNotEmpty && categories.length > 0) {
+    separator = "\u0020\u0020\u2022\u0020\u0020";
+  } else {
+    separator = "";
+  }
+  return "$price$separator${categories.join(", ")}";
+}

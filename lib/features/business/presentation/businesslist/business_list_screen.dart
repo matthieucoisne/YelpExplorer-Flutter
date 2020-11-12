@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:transparent_image/transparent_image.dart';
-import 'package:yelpexplorer/core/utils/const.dart' as Const;
-import 'package:yelpexplorer/core/utils/injection.dart';
-import 'package:yelpexplorer/core/utils/stars_provider.dart' as StarsProvider;
+import 'package:yelpexplorer/core/utils/business_helper.dart' as BusinessHelper;
 import 'package:yelpexplorer/features/business/domain/common/model/business.dart';
-import 'package:yelpexplorer/features/business/domain/common/usecase/get_business_list_usecase.dart';
-import 'package:yelpexplorer/features/business/domain/graphql/usecase/get_business_list_graphql_usecase.dart';
-import 'package:yelpexplorer/features/business/domain/rest/usecase/get_business_list_rest_usecase.dart';
-import 'package:yelpexplorer/features/business/presentation/screen/business_details_screen.dart';
+import 'package:yelpexplorer/features/business/presentation/businessdetails/business_details_screen.dart';
+import 'package:yelpexplorer/features/business/presentation/businesslist/business_list_bloc.dart';
+import 'package:yelpexplorer/features/business/presentation/widget/screen_loader.dart';
 
 class BusinessListScreen extends StatefulWidget {
   @override
@@ -15,35 +13,18 @@ class BusinessListScreen extends StatefulWidget {
 }
 
 class _BusinessListScreenState extends State<BusinessListScreen> {
-  List<Business> businesses;
-  bool isLoading;
-
   @override
   void initState() {
     super.initState();
-    isLoading = true;
-    getData();
-  }
 
-  void getData() async {
-    // TODO
-    GetBusinessListUseCase getBusinessListUseCase;
-    if (Const.USE_GRAPHQL) {
-      getBusinessListUseCase = getIt<GetBusinessListGraphQLUseCase>();
-    } else {
-      getBusinessListUseCase = getIt<GetBusinessListRestUseCase>();
-    }
-
-    List<Business> businesses = await getBusinessListUseCase.execute(
-      term: "sushi",
-      location: "montreal",
-      sortBy: "rating",
-      limit: 20,
+    BlocProvider.of<BusinessListBloc>(context).add(
+      GetBusinessList(
+        term: "sushi",
+        location: "montreal",
+        sortBy: "rating",
+        limit: 20,
+      ),
     );
-    setState(() {
-      this.isLoading = false;
-      this.businesses = businesses;
-    });
   }
 
   @override
@@ -52,34 +33,40 @@ class _BusinessListScreenState extends State<BusinessListScreen> {
       appBar: AppBar(
         title: Text("YelpExplorer-Flutter"),
       ),
-      body: BusinessList(businesses, isLoading),
+      body: BlocConsumer<BusinessListBloc, BusinessListState>(
+        listener: (context, state) {
+          if (state is BusinessListError) {
+            Scaffold.of(context).showSnackBar(
+              SnackBar(content: Text(state.error)),
+            );
+          }
+        },
+        builder: (context, state) {
+          if (state is BusinessListLoading) {
+            return ScreenLoader();
+          } else if (state is BusinessListSuccess) {
+            return BusinessList(state.businesses);
+          } else {
+            // Error - A Snackbar will be displayed
+            return Container();
+          }
+        },
+      ),
     );
   }
 }
 
 class BusinessList extends StatelessWidget {
   final List<Business> businessList;
-  final bool isLoading;
-  final double loaderSize = 24.0;
 
-  BusinessList(this.businessList, this.isLoading);
+  BusinessList(this.businessList);
 
   @override
   Widget build(BuildContext context) {
-    if (isLoading) {
-      return Center(
-        child: SizedBox(
-          child: CircularProgressIndicator(),
-          height: loaderSize,
-          width: loaderSize,
-        ),
-      );
-    } else {
-      return ListView.builder(
-        itemBuilder: (context, index) => BusinessListItem(businessList[index], index + 1),
-        itemCount: businessList.length,
-      );
-    }
+    return ListView.builder(
+      itemBuilder: (context, index) => BusinessListItem(businessList[index], index + 1),
+      itemCount: businessList.length,
+    );
   }
 }
 
@@ -91,14 +78,13 @@ class BusinessListItem extends StatelessWidget {
 
   BusinessListItem(this.business, this.index);
 
-  String getPriceAndCategories() {
-    String separator;
-    if (business.price.isNotEmpty && business.categories.length > 0) {
-      separator = "\u0020\u0020\u2022\u0020\u0020";
-    } else {
-      separator = "";
-    }
-    return "${business.price}$separator${business.categories.join(", ")}";
+  void _navigateToDetails(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => BusinessDetailsScreen(business.id),
+      ),
+    );
   }
 
   @override
@@ -109,12 +95,7 @@ class BusinessListItem extends StatelessWidget {
       ),
       child: InkWell(
         onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => BusinessDetailsScreen(business.id),
-            ),
-          );
+          _navigateToDetails(context);
         },
         child: Container(
           height: cardHeight,
@@ -154,7 +135,7 @@ class BusinessListItem extends StatelessWidget {
                       Row(
                         children: [
                           Image(
-                            image: StarsProvider.getRatingImage(business.rating),
+                            image: BusinessHelper.getRatingImage(business.rating),
                             width: 82.0,
                             height: 14.0,
                           ),
@@ -168,7 +149,7 @@ class BusinessListItem extends StatelessWidget {
                         ],
                       ),
                       Text(
-                        getPriceAndCategories(),
+                        BusinessHelper.formatPriceAndCategories(business.price, business.categories),
                         style: textStyle,
                       ),
                       Text(

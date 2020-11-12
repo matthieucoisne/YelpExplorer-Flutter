@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:yelpexplorer/core/utils/injection.dart' as injection;
-import 'package:yelpexplorer/features/business/presentation/screen/business_list_screen.dart';
+import 'package:yelpexplorer/features/business/presentation/businesslist/business_list_bloc.dart';
+import 'package:yelpexplorer/features/business/presentation/businesslist/business_list_screen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,7 +19,10 @@ class YelpExplorer extends StatelessWidget {
         primaryColor: Colors.red[700],
         accentColor: Colors.red[400],
       ),
-      home: BusinessListScreen(),
+      home: BlocProvider(
+        create: (context) => injection.getIt<BusinessListBloc>(),
+        child: BusinessListScreen(),
+      ),
     );
   }
 }

@@ -10,6 +10,7 @@ class BusinessMockRepository extends Mock implements BusinessGraphQLRepository {
 void main() {
   GetBusinessListUseCase usecase;
   BusinessMockRepository mockRepository;
+
   final Business fakeBusiness = Business(
     id: "id",
     name: "name",
@@ -42,12 +43,7 @@ void main() {
       );
 
       // Act
-      final result = await usecase.execute(
-        term: term,
-        location: location,
-        sortBy: sortBy,
-        limit: limit,
-      );
+      final result = await usecase.execute(term, location, sortBy, limit);
 
       // Assert
       expect(result, fakeBusinesses);
