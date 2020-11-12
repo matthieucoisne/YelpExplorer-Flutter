@@ -50,7 +50,7 @@ void main() {
       );
 
       // Act
-      final result = await usecase.execute(businessId: businessId);
+      final result = await usecase.execute(businessId);
 
       // Assert
       expect(result, fakeBusiness);

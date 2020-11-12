@@ -1,50 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:yelpexplorer/core/utils/const.dart' as Const;
-import 'package:yelpexplorer/core/utils/injection.dart';
-import 'package:yelpexplorer/core/utils/stars_provider.dart' as StarsProvider;
+import 'package:yelpexplorer/core/utils/injection.dart' as injection;
+import 'package:yelpexplorer/core/utils/business_helper.dart' as BusinessHelper;
 import 'package:yelpexplorer/features/business/domain/common/model/business.dart';
 import 'package:yelpexplorer/features/business/domain/common/model/review.dart';
-import 'package:yelpexplorer/features/business/domain/common/usecase/get_business_details_usecase.dart';
-import 'package:yelpexplorer/features/business/domain/graphql/usecase/get_business_details_graphql_usecase.dart';
-import 'package:yelpexplorer/features/business/domain/rest/usecase/get_business_details_rest_usecase.dart';
+import 'package:yelpexplorer/features/business/presentation/businessdetails/business_details_cubit.dart';
+import 'package:yelpexplorer/features/business/presentation/widget/screen_loader.dart';
 
 class BusinessDetailsScreen extends StatefulWidget {
-  final String businessId;
+  final String _businessId;
 
-  BusinessDetailsScreen(this.businessId);
+  BusinessDetailsScreen(this._businessId);
 
   @override
   _BusinessDetailsScreenState createState() => _BusinessDetailsScreenState();
 }
 
 class _BusinessDetailsScreenState extends State<BusinessDetailsScreen> {
-  Business business;
-  bool isLoading;
+  // Another way of doing it compared to the BusinessListScreen
+  // Here I am using a cubit but could have used a BLoC
+  // I could have used `BlocProvider.of<BusinessDetailsCubit>(context)` instead of using getIt
+  // Only if the previous screen is pushing a route wrapped in a `BlocProvider`
+  final BusinessDetailsCubit businessDetailsCubit = injection.getIt<BusinessDetailsCubit>();
 
   @override
   void initState() {
     super.initState();
-    isLoading = true;
-    getData();
-  }
-
-  void getData() async {
-    // TODO
-    GetBusinessDetailsUseCase getBusinessDetailsUseCase;
-    if (Const.USE_GRAPHQL) {
-      getBusinessDetailsUseCase = getIt<GetBusinessDetailsGraphQLUseCase>();
-    } else {
-      getBusinessDetailsUseCase = getIt<GetBusinessDetailsRestUseCase>();
-    }
-
-    Business business = await getBusinessDetailsUseCase.execute(
-      businessId: widget.businessId,
-    );
-    setState(() {
-      this.isLoading = false;
-      this.business = business;
-    });
+    businessDetailsCubit.getBusinessDetails(businessId: widget._businessId);
   }
 
   @override
@@ -53,55 +37,64 @@ class _BusinessDetailsScreenState extends State<BusinessDetailsScreen> {
       appBar: AppBar(
         title: Text("YelpExplorer-Flutter"),
       ),
-      body: BusinessDetails(business, isLoading),
+      body: BlocProvider(
+        create: (context) => businessDetailsCubit,
+        child: BlocConsumer<BusinessDetailsCubit, BusinessDetailsState>(
+          listener: (context, state) {
+            if (state is BusinessDetailsError) {
+              Scaffold.of(context).showSnackBar(
+                SnackBar(content: Text(state.error)),
+              );
+            }
+          },
+          builder: (context, state) {
+            if (state is BusinessDetailsLoading) {
+              return ScreenLoader();
+            } else if (state is BusinessDetailsSuccess) {
+              return BusinessDetails(state.business);
+            } else {
+              // Error - A Snackbar will be displayed
+              return Container();
+            }
+          },
+        ),
+      ),
     );
   }
 }
 
 class BusinessDetails extends StatelessWidget {
   final Business business;
-  final bool isLoading;
   final double photoSize = 200.0;
-  final double loaderSize = 24.0;
 
-  BusinessDetails(this.business, this.isLoading);
+  BusinessDetails(this.business);
 
   @override
   Widget build(BuildContext context) {
-    if (isLoading) {
-      return Center(
-        child: SizedBox(
-          child: CircularProgressIndicator(),
-          height: loaderSize,
-          width: loaderSize,
-        ),
-      );
-    } else {
-      return SingleChildScrollView(
-        child: Column(
-          children: [
-            FadeInImage.memoryNetwork(
-              placeholder: kTransparentImage,
-              image: business.imageUrl,
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          FadeInImage.memoryNetwork(
+            placeholder: kTransparentImage,
+            image: business.imageUrl,
+            height: photoSize,
+            fit: BoxFit.cover,
+            imageErrorBuilder: (context, url, error) => Image(
+              image: AssetImage("assets/placeholder_business_details.png"),
               height: photoSize,
-              fit: BoxFit.cover,
-              imageErrorBuilder: (context, url, error) => Image(
-                image: AssetImage("assets/placeholder_business_details.png"),
-                height: photoSize,
-              ),
             ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                BusinessInfo(business),
-                OpeningHours(business.hours),
-                ReviewList(business.reviews),
-              ],
-            ),
-          ],
-        ),
-      );
-    }
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              BusinessInfo(business),
+              OpeningHours(business.hours),
+              ReviewList(business.reviews),
+            ],
+          ),
+        ],
+      ),
+    );
   }
 }
 
@@ -110,17 +103,6 @@ class BusinessInfo extends StatelessWidget {
   final TextStyle textStyle = TextStyle(fontSize: 13.0);
 
   BusinessInfo(this.business);
-
-  String getPriceAndCategories() {
-    // DRY - there is the same function in the business list
-    String separator;
-    if (business.price.isNotEmpty && business.categories.length > 0) {
-      separator = "\u0020\u0020\u2022\u0020\u0020";
-    } else {
-      separator = "";
-    }
-    return "${business.price}$separator${business.categories.join(", ")}";
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -141,7 +123,7 @@ class BusinessInfo extends StatelessWidget {
           Row(
             children: [
               Image(
-                image: StarsProvider.getRatingImage(business.rating),
+                image: BusinessHelper.getRatingImage(business.rating),
                 width: 82.0,
                 height: 14.0,
               ),
@@ -157,7 +139,7 @@ class BusinessInfo extends StatelessWidget {
           Container(
             margin: EdgeInsets.only(top: 8.0),
             child: Text(
-              getPriceAndCategories(),
+              BusinessHelper.formatPriceAndCategories(business.price, business.categories),
               style: textStyle,
             ),
           ),
@@ -308,7 +290,7 @@ class ReviewListItem extends StatelessWidget {
                         child: Row(
                           children: [
                             Image(
-                              image: StarsProvider.getRatingImage(review.rating),
+                              image: BusinessHelper.getRatingImage(review.rating),
                               width: 82.0,
                               height: 14.0,
                             ),
