@@ -1,7 +1,6 @@
 import 'package:get_it/get_it.dart';
-import 'package:graphql_flutter/graphql_flutter.dart';
-import 'package:http/http.dart' as http;
 import 'package:yelpexplorer/core/utils/const.dart' as Const;
+import 'package:yelpexplorer/core/utils/network.dart' as Network;
 import 'package:yelpexplorer/features/business/data/graphql/datasource/remote/business_graphql_datasource.dart';
 import 'package:yelpexplorer/features/business/data/graphql/repository/business_graphql_data_repository.dart';
 import 'package:yelpexplorer/features/business/data/rest/datasource/remote/business_rest_datasource.dart';
@@ -47,16 +46,7 @@ void _setupGraphQL() {
   getIt.registerLazySingleton(() => BusinessGraphQLDataSource(getIt()));
 
   // Api client
-  getIt.registerLazySingleton(() {
-    final HttpLink httpLink = HttpLink(uri: Const.URL_GRAPHQL);
-    final AuthLink authLink = AuthLink(getToken: () => "Bearer ${Const.API_KEY}");
-    final Link link = authLink.concat(httpLink);
-    final GraphQLClient graphQLClient = GraphQLClient(
-      cache: InMemoryCache(),
-      link: link,
-    );
-    return graphQLClient;
-  });
+  getIt.registerLazySingleton(() => Network.getGraphQLClient(Network.getHttpClient()));
 }
 
 void _setupRest() {
@@ -83,5 +73,5 @@ void _setupRest() {
   getIt.registerLazySingleton(() => BusinessRestDataSource(getIt()));
 
   // Api client
-  getIt.registerLazySingleton(() => http.Client());
+  getIt.registerLazySingleton(() => Network.getHttpClient());
 }

@@ -15,6 +15,7 @@ void main() {
   final String location = "montreal";
   final String sortBy = "rating";
   final int limit = 20;
+  final String errorMessage = "error";
 
   final Business fakeBusiness = Business(
     id: "id",
@@ -65,7 +66,7 @@ void main() {
   blocTest<BusinessListBloc, BusinessListState>(
     "should yield BusinessListError when there is an exception",
     build: () {
-      when(mockUseCase.execute(any, any, any, any)).thenThrow(Exception());
+      when(mockUseCase.execute(any, any, any, any)).thenThrow(Exception(errorMessage));
       return bloc;
     },
     act: (bloc) async {
@@ -78,7 +79,7 @@ void main() {
     },
     expect: [
       BusinessListLoading(),
-      BusinessListError("ERROR"),
+      BusinessListError(Exception(errorMessage).toString()),
     ],
   );
 }

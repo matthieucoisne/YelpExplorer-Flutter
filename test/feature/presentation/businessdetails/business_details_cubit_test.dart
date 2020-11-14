@@ -36,6 +36,7 @@ void main() {
     hours: null,
     reviews: fakeReviews,
   );
+  final String errorMessage = "error";
 
   setUp(() {
     mockUseCase = MockGetBusinessDetailsUseCase();
@@ -67,7 +68,7 @@ void main() {
   blocTest<BusinessDetailsCubit, BusinessDetailsState>(
     "should emit BusinessDetailsError when there is an exception",
     build: () {
-      when(mockUseCase.execute(any)).thenThrow(Exception());
+      when(mockUseCase.execute(any)).thenThrow(Exception(errorMessage));
       return cubit;
     },
     act: (cubit) async {
@@ -75,7 +76,7 @@ void main() {
     },
     expect: [
       BusinessDetailsLoading(),
-      BusinessDetailsError("ERROR"),
+      BusinessDetailsError(Exception(errorMessage).toString()),
     ],
   );
 }
