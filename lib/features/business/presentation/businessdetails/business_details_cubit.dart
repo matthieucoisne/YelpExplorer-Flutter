@@ -18,8 +18,8 @@ class BusinessDetailsCubit extends Cubit<BusinessDetailsState> {
       emit(BusinessDetailsLoading());
       final businesses = await _businessDetailsUseCase.execute(businessId);
       emit(BusinessDetailsSuccess(businesses));
-    } on Exception {
-      emit(BusinessDetailsError("ERROR")); // TODO
+    } on Exception catch (e) {
+      emit(BusinessDetailsError(e.toString())); // TODO
     }
   }
 }

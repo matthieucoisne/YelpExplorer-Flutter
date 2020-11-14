@@ -1,9 +1,12 @@
+import 'package:flutter/foundation.dart';
+
 const URL_REST = "https://api.yelp.com/v3";
 const URL_GRAPHQL = "https://api.yelp.com/v3/graphql";
 
 const API_KEY = "YOUR_API_KEY";
 
-const USE_GRAPHQL = true;
+// Force Web to use REST: https://github.com/matthieucoisne/YelpExplorer-Flutter/issues/18
+const USE_GRAPHQL = !kIsWeb && true;
 
 const PATTERN_DATE_TIME = "yyyy-MM-dd HH:mm:ss";
 const PATTERN_DATE = "M/d/yyyy";

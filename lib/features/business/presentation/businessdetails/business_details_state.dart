@@ -3,9 +3,6 @@ part of '../businessdetails/business_details_cubit.dart';
 @immutable
 abstract class BusinessDetailsState extends Equatable {
   const BusinessDetailsState();
-
-  @override
-  List<Object> get props => [];
 }
 
 class BusinessDetailsLoading extends BusinessDetailsState {
@@ -17,6 +14,7 @@ class BusinessDetailsLoading extends BusinessDetailsState {
 
 class BusinessDetailsSuccess extends BusinessDetailsState {
   final Business business;
+
   const BusinessDetailsSuccess(this.business);
 
   @override
@@ -25,6 +23,7 @@ class BusinessDetailsSuccess extends BusinessDetailsState {
 
 class BusinessDetailsError extends BusinessDetailsState {
   final String error;
+
   const BusinessDetailsError(this.error);
 
   @override

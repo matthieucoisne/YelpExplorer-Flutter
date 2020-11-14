@@ -25,7 +25,7 @@ class BusinessListBloc extends Bloc<BusinessListEvent, BusinessListState> {
         );
         yield (BusinessListSuccess(businesses));
       } on Exception catch (e) {
-        yield (BusinessListError("ERROR")); // TODO
+        yield (BusinessListError(e.toString())); // TODO
       }
     }
   }

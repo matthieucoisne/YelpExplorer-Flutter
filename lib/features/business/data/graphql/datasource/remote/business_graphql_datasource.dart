@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:yelpexplorer/core/utils/network.dart';
 import 'package:yelpexplorer/features/business/data/graphql/model/business_graphql_model.dart';
 
 class BusinessGraphQLDataSource {
@@ -9,7 +10,7 @@ class BusinessGraphQLDataSource {
 
   Future<BusinessListGraphQLModel> getBusinessList(String term, String location, String sortBy, int limit) async {
     // TODO add try/catch
-    final QueryResult queryResult = await client.query(QueryOptions(
+    final QueryResult queryResult = await client.getData(QueryOptions(
       documentNode: Queries.businessListQuery,
       variables: {
         "term": term,
@@ -24,7 +25,7 @@ class BusinessGraphQLDataSource {
 
   Future<BusinessDetailsGraphQLModel> getBusinessDetails(String businessId) async {
     // TODO add try/catch
-    final QueryResult queryResult = await client.query(QueryOptions(
+    final QueryResult queryResult = await client.getData(QueryOptions(
       documentNode: Queries.businessDetailsQuery,
       variables: {
         "id": businessId,
