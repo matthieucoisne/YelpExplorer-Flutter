@@ -39,7 +39,7 @@ jobs:
           git init
           git config --global user.name GithubActions
           git status
-          git remote add origin https://${{secrets.commit_secret}}@github.com/matthieucoisne/YelpExplorer-Flutter.git
+          git remote add origin https://${{secrets.commit}}@github.com/matthieucoisne/YelpExplorer-Flutter.git
           git checkout -b gh-pages
           git add --all
           git commit -m "update"
