@@ -4,9 +4,9 @@ import 'package:yelpexplorer/core/utils/injection.dart' as injection;
 import 'package:yelpexplorer/features/business/presentation/businesslist/business_list_bloc.dart';
 import 'package:yelpexplorer/features/business/presentation/businesslist/business_list_screen.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  injection.setup();
+  await injection.setup();
   return runApp(YelpExplorer());
 }
 

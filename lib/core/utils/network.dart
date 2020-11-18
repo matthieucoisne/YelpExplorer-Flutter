@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:yelpexplorer/core/utils/const.dart' as Const;
+import 'package:yelpexplorer/core/utils/injection.dart';
 
 extension HttpClientExtension on http.Client {
   Future<T> getData<T>(String url, T Function(dynamic) fn) async {
@@ -18,7 +19,7 @@ extension HttpClientExtension on http.Client {
     try {
       response = await this.get(
         finalUrl,
-        headers: {HttpHeaders.authorizationHeader: "Bearer ${Const.API_KEY}"},
+        headers: {HttpHeaders.authorizationHeader: "Bearer ${getIt<String>(instanceName: Const.NAMED_API_KEY)}"},
       );
     } finally {
       // The app is configured to use only one http client. Don't close it.
@@ -57,7 +58,7 @@ GraphQLClient getGraphQLClient(http.Client httpClient) {
     uri: finalUrl,
     httpClient: httpClient,
   );
-  final AuthLink authLink = AuthLink(getToken: () => "Bearer ${Const.API_KEY}");
+  final AuthLink authLink = AuthLink(getToken: () => "Bearer ${getIt<String>(instanceName: Const.NAMED_API_KEY)}");
   final Link link = authLink.concat(httpLink);
 
   return GraphQLClient(

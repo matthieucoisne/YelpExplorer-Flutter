@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
 import 'package:yelpexplorer/core/utils/const.dart' as Const;
 import 'package:yelpexplorer/core/utils/network.dart' as Network;
@@ -18,8 +21,15 @@ import 'package:yelpexplorer/features/business/presentation/businesslist/busines
 
 final getIt = GetIt.instance;
 
-void setup() {
+Future<void> setup() async {
+  await _setupAppConfig();
   Const.USE_GRAPHQL ? _setupGraphQL() : _setupRest();
+}
+
+Future<void> _setupAppConfig() async {
+  final String json = await rootBundle.loadString("config/app_config.json");
+  final String apiKey = jsonDecode(json)["api_key"];
+  getIt.registerSingleton(apiKey, instanceName: Const.NAMED_API_KEY);
 }
 
 void _setupGraphQL() {

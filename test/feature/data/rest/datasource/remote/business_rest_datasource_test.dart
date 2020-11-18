@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:mockito/mockito.dart';
+import 'package:yelpexplorer/core/utils/const.dart' as Const;
+import 'package:yelpexplorer/core/utils/injection.dart';
 import 'package:yelpexplorer/features/business/data/rest/datasource/remote/business_rest_datasource.dart';
 import 'package:yelpexplorer/features/business/data/rest/model/business_rest_model.dart';
 import 'package:yelpexplorer/features/business/data/rest/model/review_rest_model.dart';
@@ -14,6 +16,8 @@ class MockHttpClient extends Mock implements http.Client {}
 void main() {
   BusinessRestDataSource remoteDataSource;
   MockHttpClient mockHttpClient;
+
+  getIt.registerSingleton("fakeApiKey", instanceName: Const.NAMED_API_KEY);
 
   setUp(() {
     mockHttpClient = MockHttpClient();
