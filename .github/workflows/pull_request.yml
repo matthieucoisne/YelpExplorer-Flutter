@@ -21,8 +21,13 @@ jobs:
 #      - run: flutter  config --enable-macos-desktop
 #      - run: flutter  config --enable-windows-desktop
 
-      - run: flutter clean
       - run: flutter pub get
+
+      - name: Add config file
+        run: |
+          mkdir config
+          cd config
+          echo '{"api_key": "${{secrets.api_key}}"}' > app_config.json
 
       - run: flutter build apk --release
       - run: flutter build ios --release --no-codesign
