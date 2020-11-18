@@ -1,4 +1,4 @@
-name: Build, test and deploy
+name: build
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  Release:
+  build:
 
     runs-on: macos-latest
 
