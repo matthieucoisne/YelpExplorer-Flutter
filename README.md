@@ -2,7 +2,7 @@
 
 [![build](https://github.com/matthieucoisne/YelpExplorer-Flutter/workflows/build/badge.svg)](https://github.com/matthieucoisne/YelpExplorer-Flutter/blob/main/.github/workflows/build.yml)
 
-[Try the web app](https://matthieucoisne.github.io/YelpExplorer-Flutter/)
+[Try the web app!](https://matthieucoisne.github.io/YelpExplorer-Flutter/)
 
 ## Project Description
 
@@ -33,24 +33,25 @@ The goal of this project is to demonstrate the differences between using a REST 
 
 ### Yelp API Key
 
-If you want to build and run this project on physical device, a simulator/emulator, or a web browser, you need to obtain your own API key from Yelp and provide it to the app.
+If you want to build and run this project on a physical device, a simulator/emulator, or a web browser, you need to obtain your own API key from Yelp and provide it to the app:
 
 1. Clone this project using Git or download the source code
 2. Request your API key: https://www.yelp.com/developers/documentation/v3/authentication \
    Note: You might need to join the developer beta to use GraphQL
-3. Create a json file `config/app_config.json` located at the root of the project and add your API key like this:
+3. Create a `config/` folder located at the root of this project
+4. Go into the `config/` folder and create a json file `app_config.json` containing your API key, like this:
    ```
    {
      "api_key": "YOUR_API_KEY"
    }
    ```
 
-Alternatively, you can play with the web version of the app [https://matthieucoisne.github.io/YelpExplorer-Flutter/](https://matthieucoisne.github.io/YelpExplorer-Flutter/)
+Alternatively, you can play with the web version of the app: [https://matthieucoisne.github.io/YelpExplorer-Flutter/](https://matthieucoisne.github.io/YelpExplorer-Flutter/)
 
 ### REST vs GraphQL
 
 
-This project allows you to either use the GraphQL API or the REST API of Yelp to retrieve data.\
+This project allows you to query Yelp's API using either GraphQL or REST.\
 To switch between one or the other, you can change the value of `USE_GRAPHQL` in `lib/core/utils/const.dart`
 
 ## Author
@@ -58,6 +59,7 @@ To switch between one or the other, you can change the value of `USE_GRAPHQL` in
 [![Follow me](https://img.shields.io/twitter/follow/matthieucoisne?style=social)](https://twitter.com/matthieucoisne)
 
 ## License
+
 ```
 Copyright 2020 Matthieu Coisne
 
