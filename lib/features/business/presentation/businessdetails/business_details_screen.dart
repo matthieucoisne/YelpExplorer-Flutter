@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:transparent_image/transparent_image.dart';
+import 'package:yelpexplorer/core/utils/business_helper.dart' as BusinessHelper;
 import 'package:yelpexplorer/core/utils/const.dart' as Const;
 import 'package:yelpexplorer/core/utils/injection.dart' as injection;
-import 'package:yelpexplorer/core/utils/business_helper.dart' as BusinessHelper;
 import 'package:yelpexplorer/features/business/domain/common/model/business.dart';
 import 'package:yelpexplorer/features/business/domain/common/model/review.dart';
 import 'package:yelpexplorer/features/business/presentation/businessdetails/business_details_cubit.dart';
@@ -310,6 +310,7 @@ class ReviewListItem extends StatelessWidget {
               ],
             ),
             Container(
+              alignment: Alignment.centerLeft,
               margin: EdgeInsets.only(top: 8.0),
               child: Text(
                 review.text,
