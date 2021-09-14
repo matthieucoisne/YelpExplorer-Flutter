@@ -1,11 +1,11 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
-import 'package:yelpexplorer/features/business/domain/common/model/business.dart';
-import 'package:yelpexplorer/features/business/domain/common/usecase/get_business_list_usecase.dart';
-import 'package:yelpexplorer/features/business/domain/rest/repository/business_rest_repository.dart';
-import 'package:yelpexplorer/features/business/domain/rest/usecase/get_business_list_rest_usecase.dart';
+import 'package:yelpexplorer/features/business/domain/model/business.dart';
+import 'package:yelpexplorer/features/business/domain/repository/business_repository.dart';
+import 'package:yelpexplorer/features/business/domain/usecase/get_business_list_usecase.dart';
+import 'package:yelpexplorer/features/business/domain/usecase/get_business_list_usecase_impl.dart';
 
-class BusinessMockRepository extends Mock implements BusinessRestRepository {}
+class BusinessMockRepository extends Mock implements BusinessRepository {}
 
 void main() {
   GetBusinessListUseCase usecase;
@@ -27,11 +27,11 @@ void main() {
 
   setUp(() {
     mockRepository = BusinessMockRepository();
-    usecase = GetBusinessListRestUseCase(mockRepository);
+    usecase = GetBusinessListUseCaseImpl(mockRepository);
   });
 
   test(
-    "should get the business list from the GetBusinessListRestUseCase",
+    "should get the business list from the GetBusinessListGraphQLUseCase",
     () async {
       // Arrange
       final String term = "sushi";
