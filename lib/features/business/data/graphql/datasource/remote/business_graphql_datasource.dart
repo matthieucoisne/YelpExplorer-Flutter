@@ -11,7 +11,7 @@ class BusinessGraphQLDataSource {
   Future<BusinessListGraphQLModel> getBusinessList(String term, String location, String sortBy, int limit) async {
     // TODO add try/catch
     final QueryResult queryResult = await client.getData(QueryOptions(
-      documentNode: Queries.businessListQuery,
+      document: Queries.businessListQuery,
       variables: {
         "term": term,
         "location": location,
@@ -26,7 +26,7 @@ class BusinessGraphQLDataSource {
   Future<BusinessDetailsGraphQLModel> getBusinessDetails(String businessId) async {
     // TODO add try/catch
     final QueryResult queryResult = await client.getData(QueryOptions(
-      documentNode: Queries.businessDetailsQuery,
+      document: Queries.businessDetailsQuery,
       variables: {
         "id": businessId,
       },
@@ -47,7 +47,7 @@ class Queries {
         }
       }
     }
-    """)..definitions.addAll(_Fragments.businessSummary.definitions);
+    """)..definitions.toList().addAll(_Fragments.businessSummary.definitions);
 
   static final businessDetailsQuery = gql("""
     query BusinessDetails(\$id: String!) {
@@ -56,7 +56,7 @@ class Queries {
         ...BusinessDetails
       }
     }
-    """)..definitions.addAll(_Fragments.businessSummary.definitions + _Fragments.businessDetails.definitions);
+    """)..definitions.toList().addAll(_Fragments.businessSummary.definitions + _Fragments.businessDetails.definitions);
 }
 
 class _Fragments {

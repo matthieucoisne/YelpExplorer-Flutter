@@ -4,8 +4,8 @@ import 'package:transparent_image/transparent_image.dart';
 import 'package:yelpexplorer/core/utils/business_helper.dart' as BusinessHelper;
 import 'package:yelpexplorer/core/utils/const.dart' as Const;
 import 'package:yelpexplorer/core/utils/injection.dart' as injection;
-import 'package:yelpexplorer/features/business/domain/common/model/business.dart';
-import 'package:yelpexplorer/features/business/domain/common/model/review.dart';
+import 'package:yelpexplorer/features/business/domain/model/business.dart';
+import 'package:yelpexplorer/features/business/domain/model/review.dart';
 import 'package:yelpexplorer/features/business/presentation/businessdetails/business_details_cubit.dart';
 import 'package:yelpexplorer/features/business/presentation/widget/screen_loader.dart';
 

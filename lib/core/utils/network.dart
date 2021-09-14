@@ -18,7 +18,7 @@ extension HttpClientExtension on http.Client {
     http.Response response;
     try {
       response = await this.get(
-        finalUrl,
+        Uri.parse(finalUrl),
         headers: {HttpHeaders.authorizationHeader: "Bearer ${getIt<String>(instanceName: Const.NAMED_API_KEY)}"},
       );
     } finally {
@@ -37,7 +37,7 @@ extension HttpClientExtension on http.Client {
 extension GraphQLClientExtension on GraphQLClient {
   Future<QueryResult> getData(QueryOptions queryOptions) {
     if (kDebugMode) {
-      print("--> GraphQL Query: ${queryOptions.documentNode.definitions[0].name.value}");
+      print("--> GraphQL Query: ${queryOptions.document.definitions[0].toString()}");
     }
     return query(queryOptions);
   }
@@ -55,14 +55,14 @@ GraphQLClient getGraphQLClient(http.Client httpClient) {
   }
 
   final HttpLink httpLink = HttpLink(
-    uri: finalUrl,
+    finalUrl,
     httpClient: httpClient,
   );
   final AuthLink authLink = AuthLink(getToken: () => "Bearer ${getIt<String>(instanceName: Const.NAMED_API_KEY)}");
   final Link link = authLink.concat(httpLink);
 
   return GraphQLClient(
-    cache: InMemoryCache(),
+    cache: GraphQLCache(),
     link: link,
   );
 }

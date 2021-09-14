@@ -1,10 +1,10 @@
 import 'package:yelpexplorer/features/business/data/graphql/datasource/remote/business_graphql_datasource.dart';
 import 'package:yelpexplorer/features/business/data/graphql/mapper/business_graphql_mapper.dart';
 import 'package:yelpexplorer/features/business/data/graphql/model/business_graphql_model.dart';
-import 'package:yelpexplorer/features/business/domain/common/model/business.dart';
-import 'package:yelpexplorer/features/business/domain/graphql/repository/business_graphql_repository.dart';
+import 'package:yelpexplorer/features/business/domain/model/business.dart';
+import 'package:yelpexplorer/features/business/domain/repository/business_repository.dart';
 
-class BusinessGraphQLDataRepository implements BusinessGraphQLRepository {
+class BusinessGraphQLDataRepository implements BusinessRepository {
   final BusinessGraphQLDataSource remoteDataSource;
 
   BusinessGraphQLDataRepository(this.remoteDataSource);
@@ -22,7 +22,7 @@ class BusinessGraphQLDataRepository implements BusinessGraphQLRepository {
   }
 
   @override
-  Future<Business> getBusinessDetails(String businessId) async {
+  Future<Business> getBusinessDetailsWithReviews(String businessId) async {
     // TODO add try/catch - return Resource<Business>
     BusinessDetailsGraphQLModel response = await remoteDataSource.getBusinessDetails(businessId);
     return response.business.toDomainModel();
