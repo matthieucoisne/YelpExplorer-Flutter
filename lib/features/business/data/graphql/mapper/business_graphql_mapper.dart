@@ -2,9 +2,9 @@ import "package:collection/collection.dart";
 import 'package:intl/intl.dart';
 import 'package:yelpexplorer/core/utils/const.dart' as Const;
 import 'package:yelpexplorer/features/business/data/graphql/model/business_graphql_model.dart';
-import 'package:yelpexplorer/features/business/domain/common/model/business.dart';
-import 'package:yelpexplorer/features/business/domain/common/model/review.dart';
-import 'package:yelpexplorer/features/business/domain/common/model/user.dart';
+import 'package:yelpexplorer/features/business/domain/model/business.dart';
+import 'package:yelpexplorer/features/business/domain/model/review.dart';
+import 'package:yelpexplorer/features/business/domain/model/user.dart';
 
 extension BusinessListGraphQLMapper on List<BusinessGraphQLModel> {
   List<Business> toDomainModel() {

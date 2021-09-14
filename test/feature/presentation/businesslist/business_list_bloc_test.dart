@@ -1,11 +1,12 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
-import 'package:yelpexplorer/features/business/domain/common/model/business.dart';
-import 'package:yelpexplorer/features/business/domain/common/usecase/get_business_list_usecase.dart';
+import 'package:yelpexplorer/features/business/domain/model/business.dart';
+import 'package:yelpexplorer/features/business/domain/usecase/get_business_list_usecase.dart';
+import 'package:yelpexplorer/features/business/domain/usecase/get_business_list_usecase_impl.dart';
 import 'package:yelpexplorer/features/business/presentation/businesslist/business_list_bloc.dart';
 
-class MockGetBusinessListUseCase extends Mock implements GetBusinessListUseCase {}
+class MockGetBusinessListUseCase extends Mock implements GetBusinessListUseCaseImpl {}
 
 void main() {
   BusinessListBloc bloc;
@@ -57,7 +58,7 @@ void main() {
         limit: limit,
       ));
     },
-    expect: [
+    expect: () => [
       BusinessListLoading(),
       BusinessListSuccess(fakeBusinesses),
     ],
@@ -77,7 +78,7 @@ void main() {
         limit: limit,
       ));
     },
-    expect: [
+    expect: () => [
       BusinessListLoading(),
       BusinessListError(Exception(errorMessage).toString()),
     ],

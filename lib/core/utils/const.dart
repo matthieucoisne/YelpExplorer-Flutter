@@ -6,7 +6,7 @@ const URL_GRAPHQL = "https://api.yelp.com/v3/graphql";
 const NAMED_API_KEY = "apiKey";
 
 // Force Web to use REST: https://github.com/matthieucoisne/YelpExplorer-Flutter/issues/18
-const USE_GRAPHQL = !kIsWeb && true;
+const USE_GRAPHQL = !kIsWeb && false;
 
 const PATTERN_DATE_TIME = "yyyy-MM-dd HH:mm:ss";
 const PATTERN_DATE = "M/d/yyyy";

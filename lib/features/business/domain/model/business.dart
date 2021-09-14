@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
-import 'package:yelpexplorer/features/business/domain/common/model/review.dart';
+import 'package:yelpexplorer/features/business/domain/model/review.dart';
 
 class Business extends Equatable {
   final String id;

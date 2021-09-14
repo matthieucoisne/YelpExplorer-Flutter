@@ -8,14 +8,11 @@ import 'package:yelpexplorer/features/business/data/graphql/datasource/remote/bu
 import 'package:yelpexplorer/features/business/data/graphql/repository/business_graphql_data_repository.dart';
 import 'package:yelpexplorer/features/business/data/rest/datasource/remote/business_rest_datasource.dart';
 import 'package:yelpexplorer/features/business/data/rest/repository/business_rest_data_repository.dart';
-import 'package:yelpexplorer/features/business/domain/common/usecase/get_business_details_usecase.dart';
-import 'package:yelpexplorer/features/business/domain/common/usecase/get_business_list_usecase.dart';
-import 'package:yelpexplorer/features/business/domain/graphql/repository/business_graphql_repository.dart';
-import 'package:yelpexplorer/features/business/domain/graphql/usecase/get_business_details_graphql_usecase.dart';
-import 'package:yelpexplorer/features/business/domain/graphql/usecase/get_business_list_graphql_usecase.dart';
-import 'package:yelpexplorer/features/business/domain/rest/repository/business_rest_repository.dart';
-import 'package:yelpexplorer/features/business/domain/rest/usecase/get_business_details_rest_usecase.dart';
-import 'package:yelpexplorer/features/business/domain/rest/usecase/get_business_list_rest_usecase.dart';
+import 'package:yelpexplorer/features/business/domain/usecase/get_business_details_usecase.dart';
+import 'package:yelpexplorer/features/business/domain/usecase/get_business_list_usecase.dart';
+import 'package:yelpexplorer/features/business/domain/usecase/get_business_details_usecase_impl.dart';
+import 'package:yelpexplorer/features/business/domain/usecase/get_business_list_usecase_impl.dart';
+import 'package:yelpexplorer/features/business/domain/repository/business_repository.dart';
 import 'package:yelpexplorer/features/business/presentation/businessdetails/business_details_cubit.dart';
 import 'package:yelpexplorer/features/business/presentation/businesslist/business_list_bloc.dart';
 
@@ -23,7 +20,8 @@ final getIt = GetIt.instance;
 
 Future<void> setup() async {
   await _setupAppConfig();
-  Const.USE_GRAPHQL ? _setupGraphQL() : _setupRest();
+  _setup();
+  Const.USE_GRAPHQL ? _setupGraphQL() : _setupRest(); // TODO remove this check so we can switch data layer impl in settings
 }
 
 Future<void> _setupAppConfig() async {
@@ -32,23 +30,25 @@ Future<void> _setupAppConfig() async {
   getIt.registerSingleton(apiKey, instanceName: Const.NAMED_API_KEY);
 }
 
-void _setupGraphQL() {
+void _setup() {
   // BLoC/Cubit
   getIt.registerFactory(() {
-    GetBusinessListUseCase getBusinessListUseCase = getIt<GetBusinessListGraphQLUseCase>();
+    GetBusinessListUseCase getBusinessListUseCase = getIt<GetBusinessListUseCaseImpl>();
     return BusinessListBloc(getBusinessListUseCase);
   });
   getIt.registerFactory(() {
-    GetBusinessDetailsUseCase getBusinessDetailsUseCase = getIt<GetBusinessDetailsGraphQLUseCase>();
+    GetBusinessDetailsUseCase getBusinessDetailsUseCase = getIt<GetBusinessDetailsUseCaseImpl>();
     return BusinessDetailsCubit(getBusinessDetailsUseCase);
   });
 
   // Use cases
-  getIt.registerLazySingleton(() => GetBusinessListGraphQLUseCase(getIt()));
-  getIt.registerLazySingleton(() => GetBusinessDetailsGraphQLUseCase(getIt()));
+  getIt.registerLazySingleton(() => GetBusinessListUseCaseImpl(getIt()));
+  getIt.registerLazySingleton(() => GetBusinessDetailsUseCaseImpl(getIt()));
+}
 
+void _setupGraphQL() {
   // Repository
-  getIt.registerLazySingleton<BusinessGraphQLRepository>(
+  getIt.registerLazySingleton<BusinessRepository>(
     () => BusinessGraphQLDataRepository(getIt()),
   );
 
@@ -60,22 +60,8 @@ void _setupGraphQL() {
 }
 
 void _setupRest() {
-  // BLoC/Cubit
-  getIt.registerFactory(() {
-    GetBusinessListUseCase getBusinessListUseCase = getIt<GetBusinessListRestUseCase>();
-    return BusinessListBloc(getBusinessListUseCase);
-  });
-  getIt.registerFactory(() {
-    GetBusinessDetailsUseCase getBusinessDetailsUseCase = getIt<GetBusinessDetailsRestUseCase>();
-    return BusinessDetailsCubit(getBusinessDetailsUseCase);
-  });
-
-  // Use cases
-  getIt.registerLazySingleton(() => GetBusinessListRestUseCase(getIt()));
-  getIt.registerLazySingleton(() => GetBusinessDetailsRestUseCase(getIt()));
-
   // Repository
-  getIt.registerLazySingleton<BusinessRestRepository>(
+  getIt.registerLazySingleton<BusinessRepository>(
     () => BusinessRestDataRepository(getIt()),
   );
 

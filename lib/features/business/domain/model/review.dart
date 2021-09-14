@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
-import 'package:yelpexplorer/features/business/domain/common/model/user.dart';
+import 'package:yelpexplorer/features/business/domain/model/user.dart';
 
 class Review extends Equatable {
   final User user;

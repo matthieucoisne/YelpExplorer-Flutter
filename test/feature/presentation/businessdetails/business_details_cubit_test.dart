@@ -1,13 +1,14 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
-import 'package:yelpexplorer/features/business/domain/common/model/business.dart';
-import 'package:yelpexplorer/features/business/domain/common/model/review.dart';
-import 'package:yelpexplorer/features/business/domain/common/model/user.dart';
-import 'package:yelpexplorer/features/business/domain/common/usecase/get_business_details_usecase.dart';
+import 'package:yelpexplorer/features/business/domain/model/business.dart';
+import 'package:yelpexplorer/features/business/domain/model/review.dart';
+import 'package:yelpexplorer/features/business/domain/model/user.dart';
+import 'package:yelpexplorer/features/business/domain/usecase/get_business_details_usecase.dart';
+import 'package:yelpexplorer/features/business/domain/usecase/get_business_details_usecase_impl.dart';
 import 'package:yelpexplorer/features/business/presentation/businessdetails/business_details_cubit.dart';
 
-class MockGetBusinessDetailsUseCase extends Mock implements GetBusinessDetailsUseCase {}
+class MockGetBusinessDetailsUseCase extends Mock implements GetBusinessDetailsUseCaseImpl {}
 
 void main() {
   BusinessDetailsCubit cubit;
@@ -59,7 +60,7 @@ void main() {
     act: (cubit) async {
       cubit.getBusinessDetails(businessId: businessId);
     },
-    expect: [
+    expect: () => [
       BusinessDetailsLoading(),
       BusinessDetailsSuccess(fakeBusiness),
     ],
@@ -74,7 +75,7 @@ void main() {
     act: (cubit) async {
       cubit.getBusinessDetails(businessId: businessId);
     },
-    expect: [
+    expect: () => [
       BusinessDetailsLoading(),
       BusinessDetailsError(Exception(errorMessage).toString()),
     ],

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:yelpexplorer/core/utils/business_helper.dart' as BusinessHelper;
-import 'package:yelpexplorer/features/business/domain/common/model/business.dart';
+import 'package:yelpexplorer/features/business/domain/model/business.dart';
 import 'package:yelpexplorer/features/business/presentation/businessdetails/business_details_screen.dart';
 import 'package:yelpexplorer/features/business/presentation/businesslist/business_list_bloc.dart';
 import 'package:yelpexplorer/features/business/presentation/widget/screen_loader.dart';

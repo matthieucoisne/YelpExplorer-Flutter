@@ -1,13 +1,13 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
-import 'package:yelpexplorer/features/business/domain/common/model/business.dart';
-import 'package:yelpexplorer/features/business/domain/common/model/review.dart';
-import 'package:yelpexplorer/features/business/domain/common/model/user.dart';
-import 'package:yelpexplorer/features/business/domain/common/usecase/get_business_details_usecase.dart';
-import 'package:yelpexplorer/features/business/domain/graphql/repository/business_graphql_repository.dart';
-import 'package:yelpexplorer/features/business/domain/graphql/usecase/get_business_details_graphql_usecase.dart';
+import 'package:yelpexplorer/features/business/domain/model/business.dart';
+import 'package:yelpexplorer/features/business/domain/model/review.dart';
+import 'package:yelpexplorer/features/business/domain/model/user.dart';
+import 'package:yelpexplorer/features/business/domain/repository/business_repository.dart';
+import 'package:yelpexplorer/features/business/domain/usecase/get_business_details_usecase.dart';
+import 'package:yelpexplorer/features/business/domain/usecase/get_business_details_usecase_impl.dart';
 
-class BusinessMockRepository extends Mock implements BusinessGraphQLRepository {}
+class BusinessMockRepository extends Mock implements BusinessRepository {}
 
 void main() {
   GetBusinessDetailsUseCase usecase;
@@ -37,7 +37,7 @@ void main() {
 
   setUp(() {
     mockRepository = BusinessMockRepository();
-    usecase = GetBusinessDetailsGraphQLUseCase(mockRepository);
+    usecase = GetBusinessDetailsUseCaseImpl(mockRepository);
   });
 
   test(
@@ -45,7 +45,7 @@ void main() {
     () async {
       // Arrange
       final String businessId = "businessId";
-      when(mockRepository.getBusinessDetails(any)).thenAnswer(
+      when(mockRepository.getBusinessDetailsWithReviews(any)).thenAnswer(
         (_) async => fakeBusiness,
       );
 
@@ -54,7 +54,7 @@ void main() {
 
       // Assert
       expect(result, fakeBusiness);
-      verify(mockRepository.getBusinessDetails(businessId));
+      verify(mockRepository.getBusinessDetailsWithReviews(businessId));
       verifyNoMoreInteractions(mockRepository);
     },
   );

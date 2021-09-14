@@ -28,7 +28,7 @@ void main() {
       final String sortBy = "rating";
       final int limit = 20;
       final QueryOptions expectedQueryOptions = QueryOptions(
-        documentNode: Queries.businessListQuery,
+        document: Queries.businessListQuery,
         variables: {
           "term": term,
           "location": location,
@@ -38,7 +38,10 @@ void main() {
       );
       final Map<String, dynamic> json = jsonDecode(fixture("graphql/getBusinessList.json"))["data"];
       when(mockGraphQLClient.query(any)).thenAnswer(
-        (_) async => QueryResult(data: json),
+        (_) async => QueryResult(
+            source: QueryResultSource.network,
+            data: json
+        ),
       );
       final BusinessListGraphQLModel businessListDataModel = BusinessListGraphQLModel.fromJson(json);
 
@@ -47,7 +50,7 @@ void main() {
 
       // Assert
       QueryOptions actualQueryOption = verify(mockGraphQLClient.query(captureAny)).captured.first as QueryOptions;
-      expect(actualQueryOption.documentNode, expectedQueryOptions.documentNode);
+      expect(actualQueryOption.document, expectedQueryOptions.document);
       expect(actualQueryOption.variables, expectedQueryOptions.variables);
       expect(result, businessListDataModel);
       verifyNoMoreInteractions(mockGraphQLClient);
@@ -60,14 +63,17 @@ void main() {
       // Arrange
       final String businessId = "businessId";
       final QueryOptions expectedQueryOptions = QueryOptions(
-        documentNode: Queries.businessDetailsQuery,
+        document: Queries.businessDetailsQuery,
         variables: {
           "id": businessId,
         },
       );
       final Map<String, dynamic> json = jsonDecode(fixture("graphql/getBusinessDetails.json"))["data"];
       when(mockGraphQLClient.query(any)).thenAnswer(
-        (_) async => QueryResult(data: json),
+        (_) async => QueryResult(
+            source: QueryResultSource.network,
+            data: json
+        ),
       );
       final BusinessDetailsGraphQLModel businessDetailsDataModel = BusinessDetailsGraphQLModel.fromJson(json);
 
@@ -76,7 +82,7 @@ void main() {
 
       // Assert
       QueryOptions actualQueryOption = verify(mockGraphQLClient.query(captureAny)).captured.first as QueryOptions;
-      expect(actualQueryOption.documentNode, expectedQueryOptions.documentNode);
+      expect(actualQueryOption.document, expectedQueryOptions.document);
       expect(actualQueryOption.variables, expectedQueryOptions.variables);
       expect(result, businessDetailsDataModel);
       verifyNoMoreInteractions(mockGraphQLClient);

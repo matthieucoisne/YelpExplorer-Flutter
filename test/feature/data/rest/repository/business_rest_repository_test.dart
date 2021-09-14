@@ -5,15 +5,15 @@ import 'package:yelpexplorer/features/business/data/rest/model/business_rest_mod
 import 'package:yelpexplorer/features/business/data/rest/model/review_rest_model.dart';
 import 'package:yelpexplorer/features/business/data/rest/model/user_rest_model.dart';
 import 'package:yelpexplorer/features/business/data/rest/repository/business_rest_data_repository.dart';
-import 'package:yelpexplorer/features/business/domain/common/model/business.dart';
-import 'package:yelpexplorer/features/business/domain/common/model/review.dart';
-import 'package:yelpexplorer/features/business/domain/common/model/user.dart';
-import 'package:yelpexplorer/features/business/domain/rest/repository/business_rest_repository.dart';
+import 'package:yelpexplorer/features/business/domain/model/business.dart';
+import 'package:yelpexplorer/features/business/domain/model/review.dart';
+import 'package:yelpexplorer/features/business/domain/model/user.dart';
+import 'package:yelpexplorer/features/business/domain/repository/business_repository.dart';
 
 class MockBusinessRestDataSource extends Mock implements BusinessRestDataSource {}
 
 void main() {
-  BusinessRestRepository repository;
+  BusinessRepository repository;
   BusinessRestDataSource mockRemoteDataSource;
 
   // Data
@@ -71,6 +71,7 @@ void main() {
     timeCreated: "2020-01-01",
   );
   final List<Review> fakeReviews = [fakeReview, fakeReview, fakeReview];
+  final Business fakeBusinessWithReviews = fakeBusiness.copyWith(reviews: fakeReviews);
 
   setUp(() {
     mockRemoteDataSource = MockBusinessRestDataSource();
@@ -100,38 +101,23 @@ void main() {
   );
 
   test(
-    "should get the business details from the rest repository",
+    "should get the business details and reviews from the rest repository",
     () async {
       // Arrange
       final String businessId = "businessId";
       when(mockRemoteDataSource.getBusinessDetails(any)).thenAnswer(
         (_) async => fakeBusinessRestModel,
       );
-
-      // Act
-      final result = await repository.getBusinessDetails(businessId);
-
-      // Assert
-      expect(result, fakeBusiness);
-      verify(mockRemoteDataSource.getBusinessDetails(businessId));
-      verifyNoMoreInteractions(mockRemoteDataSource);
-    },
-  );
-
-  test(
-    "should get the business reviews from the rest repository",
-    () async {
-      // Arrange
-      final String businessId = "businessId";
       when(mockRemoteDataSource.getBusinessReviews(any)).thenAnswer(
         (_) async => fakeReviewListRestModel,
       );
 
       // Act
-      final result = await repository.getBusinessReviews(businessId);
+      final result = await repository.getBusinessDetailsWithReviews(businessId);
 
       // Assert
-      expect(result, fakeReviews);
+      expect(result, fakeBusinessWithReviews);
+      verify(mockRemoteDataSource.getBusinessDetails(businessId));
       verify(mockRemoteDataSource.getBusinessReviews(businessId));
       verifyNoMoreInteractions(mockRemoteDataSource);
     },

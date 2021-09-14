@@ -2,13 +2,14 @@ import "package:collection/collection.dart";
 import 'package:intl/intl.dart';
 import 'package:yelpexplorer/core/utils/const.dart' as Const;
 import 'package:yelpexplorer/features/business/data/rest/model/business_rest_model.dart';
-import 'package:yelpexplorer/features/business/domain/common/model/business.dart';
+import 'package:yelpexplorer/features/business/domain/model/business.dart';
 
 extension BusinessListRestMapper on List<BusinessRestModel> {
   List<Business> toDomainModel() {
     return map((business) => business.toDomainModel()).toList();
   }
 }
+// TODO null safety?
 
 extension BusinessMapper on BusinessRestModel {
   Business toDomainModel() {

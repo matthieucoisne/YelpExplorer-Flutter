@@ -5,15 +5,15 @@ import 'package:yelpexplorer/features/business/data/graphql/model/business_graph
 import 'package:yelpexplorer/features/business/data/graphql/model/review_graphql_model.dart';
 import 'package:yelpexplorer/features/business/data/graphql/model/user_graphql_model.dart';
 import 'package:yelpexplorer/features/business/data/graphql/repository/business_graphql_data_repository.dart';
-import 'package:yelpexplorer/features/business/domain/common/model/business.dart';
-import 'package:yelpexplorer/features/business/domain/common/model/review.dart';
-import 'package:yelpexplorer/features/business/domain/common/model/user.dart';
-import 'package:yelpexplorer/features/business/domain/graphql/repository/business_graphql_repository.dart';
+import 'package:yelpexplorer/features/business/domain/model/business.dart';
+import 'package:yelpexplorer/features/business/domain/model/review.dart';
+import 'package:yelpexplorer/features/business/domain/model/user.dart';
+import 'package:yelpexplorer/features/business/domain/repository/business_repository.dart';
 
 class MockBusinessGraphQLDataSource extends Mock implements BusinessGraphQLDataSource {}
 
 void main() {
-  BusinessGraphQLRepository repository;
+  BusinessRepository repository;
   BusinessGraphQLDataSource mockRemoteDataSource;
 
   // Data
@@ -100,7 +100,7 @@ void main() {
   );
 
   test(
-    "should get the business details from the graphql repository",
+    "should get the business details and reviews from the graphql repository",
     () async {
       // Arrange
       final String businessId = "businessId";
@@ -109,7 +109,7 @@ void main() {
       );
 
       // Act
-      final result = await repository.getBusinessDetails(businessId);
+      final result = await repository.getBusinessDetailsWithReviews(businessId);
 
       // Assert
       expect(result, fakeBusiness);
