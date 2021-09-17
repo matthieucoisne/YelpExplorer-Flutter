@@ -4,7 +4,7 @@ import 'package:yelpexplorer/features/business/data/graphql/datasource/remote/bu
 import 'package:yelpexplorer/features/business/data/graphql/model/business_graphql_model.dart';
 import 'package:yelpexplorer/features/business/data/graphql/model/review_graphql_model.dart';
 import 'package:yelpexplorer/features/business/data/graphql/model/user_graphql_model.dart';
-import 'package:yelpexplorer/features/business/data/graphql/repository/business_graphql_data_repository.dart';
+import 'package:yelpexplorer/features/business/data/graphql/repository/business_graphql_repository.dart';
 import 'package:yelpexplorer/features/business/domain/model/business.dart';
 import 'package:yelpexplorer/features/business/domain/model/review.dart';
 import 'package:yelpexplorer/features/business/domain/model/user.dart';
@@ -74,7 +74,7 @@ void main() {
 
   setUp(() {
     mockRemoteDataSource = MockBusinessGraphQLDataSource();
-    repository = BusinessGraphQLDataRepository(mockRemoteDataSource);
+    repository = BusinessGraphQLRepository(mockRemoteDataSource);
   });
 
   test(

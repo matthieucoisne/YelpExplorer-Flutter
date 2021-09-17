@@ -1,17 +1,18 @@
 import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:http/http.dart' as http;
+import 'package:http/http.dart';
 import 'package:mockito/mockito.dart';
 import 'package:yelpexplorer/core/utils/const.dart' as Const;
 import 'package:yelpexplorer/core/utils/injection.dart';
+import 'package:yelpexplorer/core/utils/network.dart';
 import 'package:yelpexplorer/features/business/data/rest/datasource/remote/business_rest_datasource.dart';
 import 'package:yelpexplorer/features/business/data/rest/model/business_rest_model.dart';
 import 'package:yelpexplorer/features/business/data/rest/model/review_rest_model.dart';
 
 import '../../../../../fixture/fixture_reader.dart';
 
-class MockHttpClient extends Mock implements http.Client {}
+class MockHttpClient extends Mock implements YelpHttpClient {}
 
 void main() {
   BusinessRestDataSource remoteDataSource;
@@ -26,14 +27,14 @@ void main() {
 
   void setUpMockHttpClientSuccess200(String filename) {
     when(mockHttpClient.get(any, headers: anyNamed("headers"))).thenAnswer(
-      (_) async => http.Response(fixture(filename), 200),
+      (_) async => Response(fixture(filename), 200),
     );
   }
 
   // TODO
   void setUpMockHttpClientFailure500() {
     when(mockHttpClient.get(any, headers: anyNamed("headers"))).thenAnswer(
-      (_) async => http.Response("Something went wrong", 500),
+      (_) async => Response("Something went wrong", 500),
     );
   }
 

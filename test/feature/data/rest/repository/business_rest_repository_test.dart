@@ -4,7 +4,7 @@ import 'package:yelpexplorer/features/business/data/rest/datasource/remote/busin
 import 'package:yelpexplorer/features/business/data/rest/model/business_rest_model.dart';
 import 'package:yelpexplorer/features/business/data/rest/model/review_rest_model.dart';
 import 'package:yelpexplorer/features/business/data/rest/model/user_rest_model.dart';
-import 'package:yelpexplorer/features/business/data/rest/repository/business_rest_data_repository.dart';
+import 'package:yelpexplorer/features/business/data/rest/repository/business_rest_repository.dart';
 import 'package:yelpexplorer/features/business/domain/model/business.dart';
 import 'package:yelpexplorer/features/business/domain/model/review.dart';
 import 'package:yelpexplorer/features/business/domain/model/user.dart';
@@ -75,7 +75,7 @@ void main() {
 
   setUp(() {
     mockRemoteDataSource = MockBusinessRestDataSource();
-    repository = BusinessRestDataRepository(mockRemoteDataSource);
+    repository = BusinessRestRepository(mockRemoteDataSource);
   });
 
   test(

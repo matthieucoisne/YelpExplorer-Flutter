@@ -5,9 +5,9 @@ import 'package:get_it/get_it.dart';
 import 'package:yelpexplorer/core/utils/const.dart' as Const;
 import 'package:yelpexplorer/core/utils/network.dart' as Network;
 import 'package:yelpexplorer/features/business/data/graphql/datasource/remote/business_graphql_datasource.dart';
-import 'package:yelpexplorer/features/business/data/graphql/repository/business_graphql_data_repository.dart';
+import 'package:yelpexplorer/features/business/data/graphql/repository/business_graphql_repository.dart';
 import 'package:yelpexplorer/features/business/data/rest/datasource/remote/business_rest_datasource.dart';
-import 'package:yelpexplorer/features/business/data/rest/repository/business_rest_data_repository.dart';
+import 'package:yelpexplorer/features/business/data/rest/repository/business_rest_repository.dart';
 import 'package:yelpexplorer/features/business/domain/usecase/get_business_details_usecase.dart';
 import 'package:yelpexplorer/features/business/domain/usecase/get_business_list_usecase.dart';
 import 'package:yelpexplorer/features/business/domain/usecase/get_business_details_usecase_impl.dart';
@@ -41,33 +41,33 @@ void _setup() {
     return BusinessDetailsCubit(getBusinessDetailsUseCase);
   });
 
-  // Use cases
+  // Use Cases
   getIt.registerLazySingleton(() => GetBusinessListUseCaseImpl(getIt()));
   getIt.registerLazySingleton(() => GetBusinessDetailsUseCaseImpl(getIt()));
+
+  // Http Client
+  getIt.registerLazySingleton(() => Network.YelpHttpClient());
 }
 
 void _setupGraphQL() {
   // Repository
   getIt.registerLazySingleton<BusinessRepository>(
-    () => BusinessGraphQLDataRepository(getIt()),
+    () => BusinessGraphQLRepository(getIt()),
   );
 
-  // Data sources
+  // Data Sources
   getIt.registerLazySingleton(() => BusinessGraphQLDataSource(getIt()));
 
-  // Api client
-  getIt.registerLazySingleton(() => Network.getGraphQLClient(Network.getHttpClient()));
+  // GraphQL Client
+  getIt.registerLazySingleton(() => Network.getGraphQLClient(getIt()));
 }
 
 void _setupRest() {
   // Repository
   getIt.registerLazySingleton<BusinessRepository>(
-    () => BusinessRestDataRepository(getIt()),
+    () => BusinessRestRepository(getIt()),
   );
 
-  // Data source
+  // Data Source
   getIt.registerLazySingleton(() => BusinessRestDataSource(getIt()));
-
-  // Api client
-  getIt.registerLazySingleton(() => Network.getHttpClient());
 }
