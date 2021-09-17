@@ -21,15 +21,12 @@ class YelpHttpClient extends http.BaseClient {
 
 extension HttpClientExtension on YelpHttpClient {
   Future<T> getData<T>(String url, T Function(dynamic) fn) async {
-    final String finalUrl = _getFinalUrl(url);
-
-    if (kDebugMode) {
-      print("--> GET $finalUrl");
-    }
-
     http.Response response;
     try {
-      response = await this.get(Uri.parse(finalUrl));
+      response = await this.get(Uri.parse(url));
+      if (kDebugMode) {
+        // TODO print(some info)
+      }
     } finally {
       // The app is configured to use only one http client. Don't close it.
       // this.close();
@@ -44,14 +41,8 @@ extension HttpClientExtension on YelpHttpClient {
 }
 
 GraphQLClient getGraphQLClient(YelpHttpClient httpClient) {
-  String finalUrl = _getFinalUrl(Const.URL_GRAPHQL);
-
-  if (kDebugMode) {
-    print("--> GraphQLClient Endpoint: $finalUrl");
-  }
-
   final HttpLink httpLink = HttpLink(
-    finalUrl,
+    Const.URL_GRAPHQL,
     httpClient: httpClient,
   );
 
@@ -67,16 +58,5 @@ extension GraphQLClientExtension on GraphQLClient {
       // TODO print(some info)
     }
     return query(queryOptions);
-  }
-}
-
-String _getFinalUrl(String url) {
-  if (kIsWeb) {
-    // Workaround: Yelp does not implement CORS (Cross Origin Resource Sharing)
-    // more info: https://cors-anywhere.herokuapp.com/
-    // https://github.com/matthieucoisne/YelpExplorer-Flutter/issues/18
-    return "https://cors-anywhere.herokuapp.com/$url";
-  } else {
-    return url;
   }
 }

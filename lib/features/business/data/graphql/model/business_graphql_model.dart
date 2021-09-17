@@ -99,7 +99,7 @@ class BusinessGraphQLModel extends Equatable {
       imageUrl: json["photos"][0],
       reviewCount: json["review_count"],
       categories: categories,
-      rating: json["rating"],
+      rating: json["rating"].toDouble(),
       price: json["price"],
       location: LocationGraphQLModel.fromJson(json["location"]),
       hours: hours,
