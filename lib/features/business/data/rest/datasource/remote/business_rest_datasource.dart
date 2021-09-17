@@ -1,11 +1,10 @@
-import 'package:http/http.dart' as http;
 import 'package:yelpexplorer/core/utils/const.dart' as Const;
 import 'package:yelpexplorer/core/utils/network.dart';
 import 'package:yelpexplorer/features/business/data/rest/model/business_rest_model.dart';
 import 'package:yelpexplorer/features/business/data/rest/model/review_rest_model.dart';
 
 class BusinessRestDataSource {
-  final http.Client client;
+  final YelpHttpClient client;
 
   BusinessRestDataSource(this.client);
 

@@ -4,10 +4,10 @@ import 'package:yelpexplorer/features/business/data/graphql/model/business_graph
 import 'package:yelpexplorer/features/business/domain/model/business.dart';
 import 'package:yelpexplorer/features/business/domain/repository/business_repository.dart';
 
-class BusinessGraphQLDataRepository implements BusinessRepository {
+class BusinessGraphQLRepository implements BusinessRepository {
   final BusinessGraphQLDataSource remoteDataSource;
 
-  BusinessGraphQLDataRepository(this.remoteDataSource);
+  BusinessGraphQLRepository(this.remoteDataSource);
 
   @override
   Future<List<Business>> getBusinessList(String term, String location, String sortBy, int limit) async {

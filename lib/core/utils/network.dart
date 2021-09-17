@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
@@ -7,7 +6,20 @@ import 'package:http/http.dart' as http;
 import 'package:yelpexplorer/core/utils/const.dart' as Const;
 import 'package:yelpexplorer/core/utils/injection.dart';
 
-extension HttpClientExtension on http.Client {
+// Custom Http Client used for both REST and GraphQL
+// Configured to work with the Yelp API
+class YelpHttpClient extends http.BaseClient {
+  final http.Client client = http.Client();
+
+  Future<http.StreamedResponse> send(http.BaseRequest request) {
+    request.headers['Authorization'] = "Bearer ${getIt<String>(instanceName: Const.NAMED_API_KEY)}";
+    request.headers['content-type'] = "application/json";
+    request.headers['accept-language'] = "en_US";
+    return client.send(request);
+  }
+}
+
+extension HttpClientExtension on YelpHttpClient {
   Future<T> getData<T>(String url, T Function(dynamic) fn) async {
     final String finalUrl = _getFinalUrl(url);
 
@@ -17,10 +29,7 @@ extension HttpClientExtension on http.Client {
 
     http.Response response;
     try {
-      response = await this.get(
-        Uri.parse(finalUrl),
-        headers: {HttpHeaders.authorizationHeader: "Bearer ${getIt<String>(instanceName: Const.NAMED_API_KEY)}"},
-      );
+      response = await this.get(Uri.parse(finalUrl));
     } finally {
       // The app is configured to use only one http client. Don't close it.
       // this.close();
@@ -34,20 +43,7 @@ extension HttpClientExtension on http.Client {
   }
 }
 
-extension GraphQLClientExtension on GraphQLClient {
-  Future<QueryResult> getData(QueryOptions queryOptions) {
-    if (kDebugMode) {
-      print("--> GraphQL Query: ${queryOptions.document.definitions[0].toString()}");
-    }
-    return query(queryOptions);
-  }
-}
-
-http.Client getHttpClient() {
-  return http.Client();
-}
-
-GraphQLClient getGraphQLClient(http.Client httpClient) {
+GraphQLClient getGraphQLClient(YelpHttpClient httpClient) {
   String finalUrl = _getFinalUrl(Const.URL_GRAPHQL);
 
   if (kDebugMode) {
@@ -58,13 +54,20 @@ GraphQLClient getGraphQLClient(http.Client httpClient) {
     finalUrl,
     httpClient: httpClient,
   );
-  final AuthLink authLink = AuthLink(getToken: () => "Bearer ${getIt<String>(instanceName: Const.NAMED_API_KEY)}");
-  final Link link = authLink.concat(httpLink);
 
   return GraphQLClient(
     cache: GraphQLCache(),
-    link: link,
+    link: httpLink,
   );
+}
+
+extension GraphQLClientExtension on GraphQLClient {
+  Future<QueryResult> getData(QueryOptions queryOptions) {
+    if (kDebugMode) {
+      // TODO print(some info)
+    }
+    return query(queryOptions);
+  }
 }
 
 String _getFinalUrl(String url) {

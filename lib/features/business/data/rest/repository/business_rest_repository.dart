@@ -7,10 +7,10 @@ import 'package:yelpexplorer/features/business/domain/model/business.dart';
 import 'package:yelpexplorer/features/business/domain/model/review.dart';
 import 'package:yelpexplorer/features/business/domain/repository/business_repository.dart';
 
-class BusinessRestDataRepository implements BusinessRepository {
+class BusinessRestRepository implements BusinessRepository {
   final BusinessRestDataSource remoteDataSource;
 
-  BusinessRestDataRepository(this.remoteDataSource);
+  BusinessRestRepository(this.remoteDataSource);
 
   @override
   Future<List<Business>> getBusinessList(String term, String location, String sortBy, int limit) async {
