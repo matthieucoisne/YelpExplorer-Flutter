@@ -5,7 +5,9 @@ class ScreenLoader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: SizedBox(
-        child: CircularProgressIndicator(),
+        child: CircularProgressIndicator(
+          valueColor: AlwaysStoppedAnimation<Color>(Colors.red[700]),
+        ),
         height: 24.0,
         width: 24.0,
       ),
