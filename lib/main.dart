@@ -13,11 +13,10 @@ void main() async {
 class YelpExplorer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final ThemeData theme = ThemeData.dark();
     return MaterialApp(
-      theme: ThemeData(
-        brightness: Brightness.dark,
-        primaryColor: Colors.red[700],
-        accentColor: Colors.red[400],
+      theme: theme.copyWith(
+        appBarTheme: AppBarTheme(color: Colors.red[700]),
       ),
       home: BlocProvider(
         create: (context) => injection.getIt<BusinessListBloc>(),
