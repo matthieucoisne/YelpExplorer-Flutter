@@ -16,14 +16,14 @@ extension BusinessMapper on BusinessRestModel {
       return category.title;
     }).toList();
 
-    final Map<int, List<String>> businessHours = {};
+    final Map<int, List<String>> hours = {};
     if (this.hours?.isNotEmpty == true) {
       final List<OpenRestModel> openingHours = this.hours![0].opens; // Only care about regular hours, index 0
       if (openingHours.isNotEmpty) {
         final DateFormat timeParser = DateFormat("HH:mm"); // Used to be Const.PATTERN_HOUR_MINUTE. See the comment below.
         final DateFormat timeFormatter = DateFormat(Const.PATTERN_TIME);
         final Map<int, List<OpenRestModel>> openingHoursPerDay = groupBy(openingHours, (openModel) => openModel.day);
-        businessHours.addAll(openingHoursPerDay.map(
+        hours.addAll(openingHoursPerDay.map(
           (day, openList) => MapEntry(
             day,
             openList.map((open) {
@@ -51,7 +51,7 @@ extension BusinessMapper on BusinessRestModel {
       address: "${this.location.address}, ${this.location.city}",
       price: this.price ?? "",
       categories: categories,
-      hours: businessHours,
+      hours: hours,
       reviews: [],
     );
   }

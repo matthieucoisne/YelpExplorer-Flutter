@@ -13,7 +13,7 @@ class BusinessListLoading extends BusinessListState {
 }
 
 class BusinessListSuccess extends BusinessListState {
-  final List<Business> businesses;
+  final List<BusinessListUiModel> businesses;
 
   const BusinessListSuccess(this.businesses);
 

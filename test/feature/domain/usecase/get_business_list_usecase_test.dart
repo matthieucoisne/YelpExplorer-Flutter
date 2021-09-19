@@ -15,7 +15,7 @@ void main() {
     id: "id",
     name: "name",
     imageUrl: "imageUrl",
-    rating: 5.0,
+    rating: 4.5,
     reviewCount: 1337,
     address: "address",
     price: "price",
