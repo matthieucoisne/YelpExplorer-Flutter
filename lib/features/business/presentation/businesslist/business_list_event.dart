@@ -12,9 +12,9 @@ class GetBusinessList extends BusinessListEvent {
   final int limit;
 
   GetBusinessList({
-    @required this.term,
-    @required this.location,
-    @required this.sortBy,
-    @required this.limit,
+    required this.term,
+    required this.location,
+    required this.sortBy,
+    required this.limit,
   });
 }

@@ -88,8 +88,8 @@ class BusinessDetails extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               BusinessInfo(business),
-              OpeningHours(business.hours),
-              ReviewList(business.reviews),
+              OpeningHours(business.hours), // TODO UiModel
+              ReviewList(business.reviews), // TODO UiModel
             ],
           ),
         ],
@@ -167,7 +167,7 @@ class OpeningHours extends StatelessWidget {
   Widget build(BuildContext context) {
     final List<TableRow> tableRows = [];
     for (int i = 0; i < Const.days.length; i++) {
-      final List<String> hoursOfDay = businessHours[i];
+      final List<String>? hoursOfDay = businessHours[i];
 
       String hours;
       if (hoursOfDay != null) {
@@ -182,7 +182,7 @@ class OpeningHours extends StatelessWidget {
             Container(
               margin: const EdgeInsets.only(top: 4.0),
               child: Text(
-                Const.days[i],
+                Const.days[i]!,
                 style: TextStyle(fontSize: 13.0, fontWeight: FontWeight.bold),
               ),
             ),

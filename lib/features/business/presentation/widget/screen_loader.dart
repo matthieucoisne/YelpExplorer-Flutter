@@ -6,7 +6,7 @@ class ScreenLoader extends StatelessWidget {
     return Center(
       child: SizedBox(
         child: CircularProgressIndicator(
-          valueColor: AlwaysStoppedAnimation<Color>(Colors.red[700]),
+          valueColor: AlwaysStoppedAnimation(Colors.red[700]!),
         ),
         height: 24.0,
         width: 24.0,

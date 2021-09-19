@@ -19,7 +19,7 @@ class BusinessGraphQLDataSource {
         "limit": limit,
       },
     ));
-    final Map<String, dynamic> json = queryResult.data;
+    final Map<String, dynamic> json = queryResult.data!;
     return BusinessListGraphQLModel.fromJson(json);
   }
 
@@ -31,7 +31,7 @@ class BusinessGraphQLDataSource {
         "id": businessId,
       },
     ));
-    final Map<String, dynamic> json = queryResult.data;
+    final Map<String, dynamic> json = queryResult.data!;
     return BusinessDetailsGraphQLModel.fromJson(json);
   }
 }

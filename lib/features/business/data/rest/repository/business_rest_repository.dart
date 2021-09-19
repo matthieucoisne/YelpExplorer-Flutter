@@ -27,8 +27,6 @@ class BusinessRestRepository implements BusinessRepository {
   @override
   Future<Business> getBusinessDetailsWithReviews(String businessId) async {
     // TODO add try/catch - return Resource<List<Review>>
-
-    // TODO launch the 2 calls in parallel and combine? ex: await Future.wait([]);
     Future<BusinessRestModel> futureBusinessRestModel = remoteDataSource.getBusinessDetails(businessId);
     Future<ReviewListRestModel> futureReviewListRestModel = remoteDataSource.getBusinessReviews(businessId);
     BusinessRestModel businessRestModel = await futureBusinessRestModel;

@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter/foundation.dart';
 import 'package:yelpexplorer/features/business/data/graphql/model/user_graphql_model.dart';
 
 class ReviewGraphQLModel extends Equatable {
@@ -9,10 +8,10 @@ class ReviewGraphQLModel extends Equatable {
   final String timeCreated;
 
   ReviewGraphQLModel({
-    @required this.user,
-    @required this.text,
-    @required this.rating,
-    @required this.timeCreated,
+    required this.user,
+    required this.text,
+    required this.rating,
+    required this.timeCreated,
   });
 
   @override

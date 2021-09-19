@@ -5,14 +5,16 @@ import 'package:yelpexplorer/features/business/data/graphql/model/business_graph
 // For simplicity, the BusinessStubDataSource uses the GraphQL data and models
 class BusinessStubDataSource {
   Future<BusinessListGraphQLModel> getBusinessList() {
-    return Future.delayed(const Duration(milliseconds: 500), () =>
-        BusinessListGraphQLModel.fromJson(_businessList)
+    return Future.delayed(
+      const Duration(milliseconds: 500),
+      () => BusinessListGraphQLModel.fromJson(_businessList),
     );
   }
 
   Future<BusinessDetailsGraphQLModel> getBusinessDetails() {
-    return Future.delayed(const Duration(milliseconds: 500), () =>
-        BusinessDetailsGraphQLModel.fromJson(_businessDetailsAndReviews)
+    return Future.delayed(
+      const Duration(milliseconds: 500),
+      () => BusinessDetailsGraphQLModel.fromJson(_businessDetailsAndReviews),
     );
   }
 }
