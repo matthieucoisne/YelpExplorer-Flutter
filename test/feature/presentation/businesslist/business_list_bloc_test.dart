@@ -5,6 +5,7 @@ import 'package:yelpexplorer/features/business/domain/model/business.dart';
 import 'package:yelpexplorer/features/business/domain/usecase/get_business_list_usecase.dart';
 import 'package:yelpexplorer/features/business/domain/usecase/get_business_list_usecase_impl.dart';
 import 'package:yelpexplorer/features/business/presentation/businesslist/business_list_bloc.dart';
+import 'package:yelpexplorer/features/business/presentation/businesslist/business_list_ui_model.dart';
 
 class MockGetBusinessListUseCase extends Mock implements GetBusinessListUseCaseImpl {}
 
@@ -22,7 +23,7 @@ void main() {
     id: "id",
     name: "name",
     imageUrl: "imageUrl",
-    rating: 5.0,
+    rating: 4.5,
     reviewCount: 1337,
     address: "address",
     price: "price",
@@ -60,7 +61,7 @@ void main() {
     },
     expect: () => [
       BusinessListLoading(),
-      BusinessListSuccess(fakeBusinesses),
+      BusinessListSuccess(fakeBusinesses.toUiModels()),
     ],
   );
 
