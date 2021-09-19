@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter/foundation.dart';
 import 'package:yelpexplorer/features/business/domain/model/user.dart';
 
 class Review extends Equatable {
@@ -9,10 +8,10 @@ class Review extends Equatable {
   final String timeCreated;
 
   Review({
-    @required this.user,
-    @required this.text,
-    @required this.rating,
-    @required this.timeCreated,
+    required this.user,
+    required this.text,
+    required this.rating,
+    required this.timeCreated,
   });
 
   @override

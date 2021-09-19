@@ -1,13 +1,10 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter/foundation.dart';
 import 'package:yelpexplorer/features/business/data/rest/model/review_rest_model.dart';
 
 class BusinessListRestModel extends Equatable {
   final List<BusinessRestModel> businesses;
 
-  BusinessListRestModel({
-    @required this.businesses,
-  });
+  BusinessListRestModel({required this.businesses});
 
   @override
   List<Object> get props => [businesses];
@@ -31,41 +28,37 @@ class BusinessRestModel extends Equatable {
   final int reviewCount;
   final List<CategoryRestModel> categories;
   final double rating;
-  final String price;
+  final String? price;
   final LocationRestModel location;
-  final List<HourRestModel> hours;
-  final List<ReviewRestModel> reviews;
+  final List<HourRestModel>? hours;
+  final List<ReviewRestModel>? reviews;
 
   BusinessRestModel({
-    @required this.id,
-    @required this.name,
-    @required this.imageUrl,
-    @required this.reviewCount,
-    @required this.categories,
-    @required this.rating,
-    @required this.price,
-    @required this.location,
-    @required this.hours,
-    @required this.reviews,
+    required this.id,
+    required this.name,
+    required this.imageUrl,
+    required this.reviewCount,
+    required this.categories,
+    required this.rating,
+    required this.price,
+    required this.location,
+    required this.hours,
+    required this.reviews,
   });
 
   @override
-  List<Object> get props => [id, name, imageUrl, rating, reviewCount, location, price, categories, hours, reviews];
+  List<Object?> get props => [id, name, imageUrl, rating, reviewCount, location, price, categories, hours, reviews];
 
   factory BusinessRestModel.fromJson(Map<String, dynamic> json) {
-    final List<CategoryRestModel> categories = [];
     final List<dynamic> jsonCategories = json["categories"];
-    if (jsonCategories != null && jsonCategories.isNotEmpty) {
-      jsonCategories.forEach((jsonCategory) {
-        categories.add(CategoryRestModel.fromJson(jsonCategory));
-      });
-    }
+    final List<CategoryRestModel> categories = jsonCategories.map((jsonCategory) {
+      return CategoryRestModel.fromJson(jsonCategory);
+    }).toList();
 
-    final List<HourRestModel> hours = [];
-    final List<dynamic> jsonHours = json["hours"];
-    if (jsonHours != null && jsonHours.isNotEmpty) {
-      hours.add(HourRestModel.fromJson(jsonHours[0]));
-    }
+    final List<dynamic>? jsonHours = json["hours"];
+    final List<HourRestModel>? hours = jsonHours?.map((jsonHour) {
+      return HourRestModel.fromJson(jsonHour);
+    }).toList();
 
     return BusinessRestModel(
       id: json["id"],
@@ -85,9 +78,7 @@ class BusinessRestModel extends Equatable {
 class CategoryRestModel extends Equatable {
   final String title;
 
-  CategoryRestModel({
-    @required this.title,
-  });
+  CategoryRestModel({required this.title});
 
   @override
   List<Object> get props => [title];
@@ -104,8 +95,8 @@ class LocationRestModel extends Equatable {
   final String city;
 
   LocationRestModel({
-    @required this.address,
-    @required this.city,
+    required this.address,
+    required this.city,
   });
 
   @override
@@ -122,9 +113,7 @@ class LocationRestModel extends Equatable {
 class HourRestModel extends Equatable {
   final List<OpenRestModel> opens;
 
-  HourRestModel({
-    @required this.opens,
-  });
+  HourRestModel({required this.opens});
 
   @override
   List<Object> get props => [opens];
@@ -147,9 +136,9 @@ class OpenRestModel extends Equatable {
   final int day;
 
   OpenRestModel({
-    @required this.start,
-    @required this.end,
-    @required this.day,
+    required this.start,
+    required this.end,
+    required this.day,
   });
 
   @override

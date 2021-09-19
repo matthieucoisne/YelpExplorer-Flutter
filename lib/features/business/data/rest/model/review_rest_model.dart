@@ -1,13 +1,10 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter/foundation.dart';
 import 'package:yelpexplorer/features/business/data/rest/model/user_rest_model.dart';
 
 class ReviewListRestModel extends Equatable {
   final List<ReviewRestModel> reviews;
 
-  ReviewListRestModel({
-    @required this.reviews,
-  });
+  ReviewListRestModel({required this.reviews});
 
   @override
   List<Object> get props => [reviews];
@@ -31,10 +28,10 @@ class ReviewRestModel extends Equatable {
   final String timeCreated;
 
   ReviewRestModel({
-    @required this.user,
-    @required this.text,
-    @required this.rating,
-    @required this.timeCreated,
+    required this.user,
+    required this.text,
+    required this.rating,
+    required this.timeCreated,
   });
 
   @override

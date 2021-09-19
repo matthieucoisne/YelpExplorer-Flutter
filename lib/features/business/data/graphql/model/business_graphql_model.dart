@@ -1,13 +1,10 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter/foundation.dart';
 import 'package:yelpexplorer/features/business/data/graphql/model/review_graphql_model.dart';
 
 class BusinessListGraphQLModel extends Equatable {
   final List<BusinessGraphQLModel> businesses;
 
-  BusinessListGraphQLModel({
-    @required this.businesses,
-  });
+  BusinessListGraphQLModel({required this.businesses});
 
   @override
   List<Object> get props => [businesses];
@@ -27,17 +24,17 @@ class BusinessListGraphQLModel extends Equatable {
 class BusinessDetailsGraphQLModel extends Equatable {
   final BusinessGraphQLModel business;
 
-  BusinessDetailsGraphQLModel({
-    @required this.business,
-  });
+  BusinessDetailsGraphQLModel({required this.business});
 
   @override
   List<Object> get props => [business];
 
   factory BusinessDetailsGraphQLModel.fromJson(Map<String, dynamic> json) {
     final Map<String, dynamic> jsonBusiness = json["business"];
+    final BusinessGraphQLModel business = BusinessGraphQLModel.fromJson(jsonBusiness);
+
     return BusinessDetailsGraphQLModel(
-      business: BusinessGraphQLModel.fromJson(jsonBusiness),
+      business: business,
     );
   }
 }
@@ -49,49 +46,42 @@ class BusinessGraphQLModel extends Equatable {
   final int reviewCount;
   final List<CategoryGraphQLModel> categories;
   final double rating;
-  final String price;
+  final String? price;
   final LocationGraphQLModel location;
-  final List<HourGraphQLModel> hours;
-  final List<ReviewGraphQLModel> reviews;
+  final List<HourGraphQLModel>? hours;
+  final List<ReviewGraphQLModel>? reviews;
 
   BusinessGraphQLModel({
-    @required this.id,
-    @required this.name,
-    @required this.imageUrl,
-    @required this.reviewCount,
-    @required this.categories,
-    @required this.rating,
-    @required this.price,
-    @required this.location,
-    @required this.hours,
-    @required this.reviews,
+    required this.id,
+    required this.name,
+    required this.imageUrl,
+    required this.reviewCount,
+    required this.categories,
+    required this.rating,
+    required this.price,
+    required this.location,
+    required this.hours,
+    required this.reviews,
   });
 
   @override
-  List<Object> get props => [id, name, imageUrl, rating, reviewCount, location, price, categories, hours, reviews];
+  List<Object?> get props => [id, name, imageUrl, rating, reviewCount, location, price, categories, hours, reviews];
 
   factory BusinessGraphQLModel.fromJson(Map<String, dynamic> json) {
-    final List<CategoryGraphQLModel> categories = [];
     final List<dynamic> jsonCategories = json["categories"];
-    if (jsonCategories != null && jsonCategories.isNotEmpty) {
-      jsonCategories.forEach((jsonCategory) {
-        categories.add(CategoryGraphQLModel.fromJson(jsonCategory));
-      });
-    }
+    final List<CategoryGraphQLModel> categories = jsonCategories.map((jsonCategory) {
+      return CategoryGraphQLModel.fromJson(jsonCategory);
+    }).toList();
 
-    final List<HourGraphQLModel> hours = [];
-    final List<dynamic> jsonHours = json["hours"];
-    if (jsonHours != null && jsonHours.isNotEmpty) {
-      hours.add(HourGraphQLModel.fromJson(jsonHours[0]));
-    }
+    final List<dynamic>? jsonHours = json["hours"];
+    final List<HourGraphQLModel>? hours = jsonHours?.map((jsonHour) {
+      return HourGraphQLModel.fromJson(jsonHour);
+    }).toList();
 
-    final List<ReviewGraphQLModel> reviews = [];
-    final List<dynamic> jsonReviews = json["reviews"];
-    if (jsonReviews != null && jsonReviews.isNotEmpty) {
-      jsonReviews.forEach((jsonReview) {
-        reviews.add(ReviewGraphQLModel.fromJson(jsonReview));
-      });
-    }
+    final List<dynamic>? jsonReviews = json["reviews"];
+    final List<ReviewGraphQLModel>? reviews = jsonReviews?.map((jsonReview) {
+      return ReviewGraphQLModel.fromJson(jsonReview);
+    }).toList();
 
     return BusinessGraphQLModel(
       id: json["id"],
@@ -111,9 +101,7 @@ class BusinessGraphQLModel extends Equatable {
 class CategoryGraphQLModel extends Equatable {
   final String title;
 
-  CategoryGraphQLModel({
-    @required this.title,
-  });
+  CategoryGraphQLModel({required this.title});
 
   @override
   List<Object> get props => [title];
@@ -130,8 +118,8 @@ class LocationGraphQLModel extends Equatable {
   final String city;
 
   LocationGraphQLModel({
-    @required this.address,
-    @required this.city,
+    required this.address,
+    required this.city,
   });
 
   @override
@@ -148,9 +136,7 @@ class LocationGraphQLModel extends Equatable {
 class HourGraphQLModel extends Equatable {
   final List<OpenGraphQLModel> opens;
 
-  HourGraphQLModel({
-    @required this.opens,
-  });
+  HourGraphQLModel({required this.opens});
 
   @override
   List<Object> get props => [opens];
@@ -161,9 +147,7 @@ class HourGraphQLModel extends Equatable {
       return OpenGraphQLModel.fromJson(jsonOpen);
     }).toList();
 
-    return HourGraphQLModel(
-      opens: opens,
-    );
+    return HourGraphQLModel(opens: opens);
   }
 }
 
@@ -173,9 +157,9 @@ class OpenGraphQLModel extends Equatable {
   final int day;
 
   OpenGraphQLModel({
-    @required this.start,
-    @required this.end,
-    @required this.day,
+    required this.start,
+    required this.end,
+    required this.day,
   });
 
   @override

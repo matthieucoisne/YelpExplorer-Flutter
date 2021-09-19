@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/mockito.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:yelpexplorer/features/business/data/graphql/datasource/remote/business_graphql_datasource.dart';
 import 'package:yelpexplorer/features/business/data/graphql/model/business_graphql_model.dart';
 import 'package:yelpexplorer/features/business/data/graphql/model/review_graphql_model.dart';
@@ -13,8 +13,8 @@ import 'package:yelpexplorer/features/business/domain/repository/business_reposi
 class MockBusinessGraphQLDataSource extends Mock implements BusinessGraphQLDataSource {}
 
 void main() {
-  BusinessRepository repository;
-  BusinessGraphQLDataSource mockRemoteDataSource;
+  late BusinessRepository repository;
+  late BusinessGraphQLDataSource mockRemoteDataSource;
 
   // Data
   final ReviewGraphQLModel fakeReviewGraphQLModel = ReviewGraphQLModel(
@@ -26,7 +26,11 @@ void main() {
     rating: 5,
     timeCreated: "2020-01-01 13:37:00",
   );
-  final List<ReviewGraphQLModel> fakeReviewGraphQLModels = [fakeReviewGraphQLModel, fakeReviewGraphQLModel, fakeReviewGraphQLModel];
+  final List<ReviewGraphQLModel> fakeReviewGraphQLModels = [
+    fakeReviewGraphQLModel,
+    fakeReviewGraphQLModel,
+    fakeReviewGraphQLModel
+  ];
   final BusinessGraphQLModel fakeBusinessGraphQLModel = BusinessGraphQLModel(
     id: "id",
     name: "name",
@@ -42,8 +46,12 @@ void main() {
     reviews: fakeReviewGraphQLModels,
   );
   final List<BusinessGraphQLModel> fakeBusinessGraphQLModels = [fakeBusinessGraphQLModel, fakeBusinessGraphQLModel];
-  final BusinessListGraphQLModel fakeBusinessListGraphQLModel = BusinessListGraphQLModel(businesses: fakeBusinessGraphQLModels);
-  final BusinessDetailsGraphQLModel fakeBusinessDetailsGraphQLModel = BusinessDetailsGraphQLModel(business: fakeBusinessGraphQLModel);
+  final BusinessListGraphQLModel fakeBusinessListGraphQLModel = BusinessListGraphQLModel(
+    businesses: fakeBusinessGraphQLModels,
+  );
+  final BusinessDetailsGraphQLModel fakeBusinessDetailsGraphQLModel = BusinessDetailsGraphQLModel(
+    business: fakeBusinessGraphQLModel,
+  );
 
   // Domain
   final Review fakeReview = Review(
@@ -85,7 +93,7 @@ void main() {
       final String location = "montreal";
       final String sortBy = "rating";
       final int limit = 10;
-      when(mockRemoteDataSource.getBusinessList(any, any, any, any)).thenAnswer(
+      when(() => mockRemoteDataSource.getBusinessList(any(), any(), any(), any())).thenAnswer(
         (_) async => fakeBusinessListGraphQLModel,
       );
 
@@ -94,7 +102,7 @@ void main() {
 
       // Assert
       expect(result, fakeBusinesses);
-      verify(mockRemoteDataSource.getBusinessList(term, location, sortBy, limit));
+      verify(() => mockRemoteDataSource.getBusinessList(term, location, sortBy, limit));
       verifyNoMoreInteractions(mockRemoteDataSource);
     },
   );
@@ -104,7 +112,7 @@ void main() {
     () async {
       // Arrange
       final String businessId = "businessId";
-      when(mockRemoteDataSource.getBusinessDetails(any)).thenAnswer(
+      when(() => mockRemoteDataSource.getBusinessDetails(any())).thenAnswer(
         (_) async => fakeBusinessDetailsGraphQLModel,
       );
 
@@ -113,7 +121,7 @@ void main() {
 
       // Assert
       expect(result, fakeBusiness);
-      verify(mockRemoteDataSource.getBusinessDetails(businessId));
+      verify(() => mockRemoteDataSource.getBusinessDetails(businessId));
       verifyNoMoreInteractions(mockRemoteDataSource);
     },
   );

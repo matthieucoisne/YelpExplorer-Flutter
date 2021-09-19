@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
-import 'package:mockito/mockito.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:yelpexplorer/features/business/data/graphql/datasource/remote/business_graphql_datasource.dart';
 import 'package:yelpexplorer/features/business/data/graphql/model/business_graphql_model.dart';
 
@@ -11,12 +11,16 @@ import '../../../../../fixture/fixture_reader.dart';
 class MockGraphQLClient extends Mock implements GraphQLClient {}
 
 void main() {
-  BusinessGraphQLDataSource remoteDataSource;
-  MockGraphQLClient mockGraphQLClient;
+  late BusinessGraphQLDataSource remoteDataSource;
+  late MockGraphQLClient mockGraphQLClient;
 
   setUp(() {
     mockGraphQLClient = MockGraphQLClient();
     remoteDataSource = BusinessGraphQLDataSource(mockGraphQLClient);
+  });
+
+  setUpAll(() {
+    registerFallbackValue(QueryOptions(document: gql("query Mocktail {}")));
   });
 
   test(
@@ -37,11 +41,8 @@ void main() {
         },
       );
       final Map<String, dynamic> json = jsonDecode(fixture("graphql/getBusinessList.json"))["data"];
-      when(mockGraphQLClient.query(any)).thenAnswer(
-        (_) async => QueryResult(
-            source: QueryResultSource.network,
-            data: json
-        ),
+      when(() => mockGraphQLClient.query(any())).thenAnswer(
+        (_) async => QueryResult(source: QueryResultSource.network, data: json),
       );
       final BusinessListGraphQLModel businessListDataModel = BusinessListGraphQLModel.fromJson(json);
 
@@ -49,7 +50,7 @@ void main() {
       final result = await remoteDataSource.getBusinessList(term, location, sortBy, limit);
 
       // Assert
-      QueryOptions actualQueryOption = verify(mockGraphQLClient.query(captureAny)).captured.first as QueryOptions;
+      QueryOptions actualQueryOption = verify(() => mockGraphQLClient.query(captureAny())).captured.first as QueryOptions;
       expect(actualQueryOption.document, expectedQueryOptions.document);
       expect(actualQueryOption.variables, expectedQueryOptions.variables);
       expect(result, businessListDataModel);
@@ -69,11 +70,8 @@ void main() {
         },
       );
       final Map<String, dynamic> json = jsonDecode(fixture("graphql/getBusinessDetails.json"))["data"];
-      when(mockGraphQLClient.query(any)).thenAnswer(
-        (_) async => QueryResult(
-            source: QueryResultSource.network,
-            data: json
-        ),
+      when(() => mockGraphQLClient.query(any())).thenAnswer(
+        (_) async => QueryResult(source: QueryResultSource.network, data: json),
       );
       final BusinessDetailsGraphQLModel businessDetailsDataModel = BusinessDetailsGraphQLModel.fromJson(json);
 
@@ -81,7 +79,7 @@ void main() {
       final result = await remoteDataSource.getBusinessDetails(businessId);
 
       // Assert
-      QueryOptions actualQueryOption = verify(mockGraphQLClient.query(captureAny)).captured.first as QueryOptions;
+      QueryOptions actualQueryOption = verify(() => mockGraphQLClient.query(captureAny())).captured.first as QueryOptions;
       expect(actualQueryOption.document, expectedQueryOptions.document);
       expect(actualQueryOption.variables, expectedQueryOptions.variables);
       expect(result, businessDetailsDataModel);

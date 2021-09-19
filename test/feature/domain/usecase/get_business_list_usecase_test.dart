@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/mockito.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:yelpexplorer/features/business/domain/model/business.dart';
 import 'package:yelpexplorer/features/business/domain/repository/business_repository.dart';
 import 'package:yelpexplorer/features/business/domain/usecase/get_business_list_usecase.dart';
@@ -8,8 +8,8 @@ import 'package:yelpexplorer/features/business/domain/usecase/get_business_list_
 class BusinessMockRepository extends Mock implements BusinessRepository {}
 
 void main() {
-  GetBusinessListUseCase usecase;
-  BusinessMockRepository mockRepository;
+  late GetBusinessListUseCase usecase;
+  late BusinessMockRepository mockRepository;
 
   final Business fakeBusiness = Business(
     id: "id",
@@ -20,8 +20,8 @@ void main() {
     address: "address",
     price: "price",
     categories: ["category"],
-    hours: null,
-    reviews: null,
+    hours: {},
+    reviews: [],
   );
   final List<Business> fakeBusinesses = [fakeBusiness, fakeBusiness, fakeBusiness, fakeBusiness];
 
@@ -38,7 +38,7 @@ void main() {
       final String location = "montreal";
       final String sortBy = "rating";
       final int limit = 20;
-      when(mockRepository.getBusinessList(any, any, any, any)).thenAnswer(
+      when(() => mockRepository.getBusinessList(any(), any(), any(), any())).thenAnswer(
         (_) async => fakeBusinesses,
       );
 
@@ -47,7 +47,7 @@ void main() {
 
       // Assert
       expect(result, fakeBusinesses);
-      verify(mockRepository.getBusinessList(term, location, sortBy, limit));
+      verify(() => mockRepository.getBusinessList(term, location, sortBy, limit));
       verifyNoMoreInteractions(mockRepository);
     },
   );

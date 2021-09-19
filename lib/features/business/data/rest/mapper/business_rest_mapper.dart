@@ -9,31 +9,32 @@ extension BusinessListRestMapper on List<BusinessRestModel> {
     return map((business) => business.toDomainModel()).toList();
   }
 }
-// TODO null safety?
 
 extension BusinessMapper on BusinessRestModel {
   Business toDomainModel() {
-    final List<String> categories = [];
-    this.categories.forEach((category) {
-      if (category != null && category.title != null) {
-        categories.add(category.title);
-      }
-    });
+    final List<String> categories = this.categories.map((category) {
+      return category.title;
+    }).toList();
 
     final Map<int, List<String>> businessHours = {};
-    if (this.hours != null && this.hours.isNotEmpty) {
-      final List<OpenRestModel> openingHours = this.hours[0].opens;
+    if (this.hours?.isNotEmpty == true) {
+      final List<OpenRestModel> openingHours = this.hours![0].opens; // Only care about regular hours, index 0
       if (openingHours.isNotEmpty) {
-        final DateFormat timeParser = DateFormat("HH:mm"); //Used to be Const.PATTERN_HOUR_MINUTE. See the comment below.
+        final DateFormat timeParser = DateFormat("HH:mm"); // Used to be Const.PATTERN_HOUR_MINUTE. See the comment below.
         final DateFormat timeFormatter = DateFormat(Const.PATTERN_TIME);
         final Map<int, List<OpenRestModel>> openingHoursPerDay = groupBy(openingHours, (openModel) => openModel.day);
         businessHours.addAll(openingHoursPerDay.map(
           (day, openList) => MapEntry(
             day,
             openList.map((open) {
-              // For some reason, parsing "1800" with "HHmm" does not work. Workaround: Inserted a ":" in between the hours and minutes and updated the pattern.
-              final String start = timeFormatter.format(timeParser.parse("${open.start.substring(0, 2)}:${open.start.substring(2, 4)}")).toLowerCase();
-              final String end = timeFormatter.format(timeParser.parse("${open.end.substring(0, 2)}:${open.end.substring(2, 4)}")).toLowerCase();
+              // For some reason, parsing "1800" with "HHmm" does not work.
+              // Workaround: Inserted a ":" in between the hours and minutes and updated the pattern.
+              final String start = timeFormatter
+                  .format(timeParser.parse("${open.start.substring(0, 2)}:${open.start.substring(2, 4)}"))
+                  .toLowerCase();
+              final String end = timeFormatter
+                  .format(timeParser.parse("${open.end.substring(0, 2)}:${open.end.substring(2, 4)}"))
+                  .toLowerCase();
               return "$start - $end";
             }).toList(),
           ),
@@ -44,14 +45,14 @@ extension BusinessMapper on BusinessRestModel {
     return Business(
       id: this.id,
       name: this.name,
-      imageUrl: this.imageUrl ?? "",
-      rating: this.rating ?? 0.0,
-      reviewCount: this.reviewCount ?? 0,
+      imageUrl: this.imageUrl,
+      rating: this.rating,
+      reviewCount: this.reviewCount,
       address: "${this.location.address}, ${this.location.city}",
       price: this.price ?? "",
       categories: categories,
       hours: businessHours,
-      reviews: null,
+      reviews: [],
     );
   }
 }

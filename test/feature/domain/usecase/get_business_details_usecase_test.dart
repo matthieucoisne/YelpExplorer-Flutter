@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/mockito.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:yelpexplorer/features/business/domain/model/business.dart';
 import 'package:yelpexplorer/features/business/domain/model/review.dart';
 import 'package:yelpexplorer/features/business/domain/model/user.dart';
@@ -10,8 +10,9 @@ import 'package:yelpexplorer/features/business/domain/usecase/get_business_detai
 class BusinessMockRepository extends Mock implements BusinessRepository {}
 
 void main() {
-  GetBusinessDetailsUseCase usecase;
-  BusinessMockRepository mockRepository;
+  late GetBusinessDetailsUseCase usecase;
+  late BusinessMockRepository mockRepository;
+
   final Review fakeReview = Review(
     user: User(
       name: "name",
@@ -31,7 +32,7 @@ void main() {
     address: "address",
     price: "price",
     categories: ["category"],
-    hours: null,
+    hours: {},
     reviews: fakeReviews,
   );
 
@@ -45,7 +46,7 @@ void main() {
     () async {
       // Arrange
       final String businessId = "businessId";
-      when(mockRepository.getBusinessDetailsWithReviews(any)).thenAnswer(
+      when(() => mockRepository.getBusinessDetailsWithReviews(any())).thenAnswer(
         (_) async => fakeBusiness,
       );
 
@@ -54,7 +55,7 @@ void main() {
 
       // Assert
       expect(result, fakeBusiness);
-      verify(mockRepository.getBusinessDetailsWithReviews(businessId));
+      verify(() => mockRepository.getBusinessDetailsWithReviews(businessId));
       verifyNoMoreInteractions(mockRepository);
     },
   );

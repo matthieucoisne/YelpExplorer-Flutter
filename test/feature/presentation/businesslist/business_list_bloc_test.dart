@@ -1,6 +1,6 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/mockito.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:yelpexplorer/features/business/domain/model/business.dart';
 import 'package:yelpexplorer/features/business/domain/usecase/get_business_list_usecase.dart';
 import 'package:yelpexplorer/features/business/domain/usecase/get_business_list_usecase_impl.dart';
@@ -9,8 +9,8 @@ import 'package:yelpexplorer/features/business/presentation/businesslist/busines
 class MockGetBusinessListUseCase extends Mock implements GetBusinessListUseCaseImpl {}
 
 void main() {
-  BusinessListBloc bloc;
-  GetBusinessListUseCase mockUseCase;
+  late BusinessListBloc bloc;
+  late GetBusinessListUseCase mockUseCase;
 
   final String term = "sushi";
   final String location = "montreal";
@@ -27,8 +27,8 @@ void main() {
     address: "address",
     price: "price",
     categories: ["category"],
-    hours: null,
-    reviews: null,
+    hours: {},
+    reviews: [],
   );
   final List<Business> fakeBusinesses = [fakeBusiness, fakeBusiness, fakeBusiness, fakeBusiness];
 
@@ -47,7 +47,7 @@ void main() {
   blocTest<BusinessListBloc, BusinessListState>(
     "should yield BusinessListSuccess in response to a GetBusinessList event",
     build: () {
-      when(mockUseCase.execute(any, any, any, any)).thenAnswer((_) async => fakeBusinesses);
+      when(() => mockUseCase.execute(any(), any(), any(), any())).thenAnswer((_) async => fakeBusinesses);
       return bloc;
     },
     act: (bloc) async {
@@ -67,7 +67,7 @@ void main() {
   blocTest<BusinessListBloc, BusinessListState>(
     "should yield BusinessListError when there is an exception",
     build: () {
-      when(mockUseCase.execute(any, any, any, any)).thenThrow(Exception(errorMessage));
+      when(() => mockUseCase.execute(any(), any(), any(), any())).thenThrow(Exception(errorMessage));
       return bloc;
     },
     act: (bloc) async {

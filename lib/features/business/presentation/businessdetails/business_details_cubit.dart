@@ -12,13 +12,13 @@ class BusinessDetailsCubit extends Cubit<BusinessDetailsState> {
   BusinessDetailsCubit(this._businessDetailsUseCase) : super(BusinessDetailsLoading());
 
   Future<void> getBusinessDetails({
-    @required String businessId,
+    required String businessId,
   }) async {
     try {
       emit(BusinessDetailsLoading());
-      final businesses = await _businessDetailsUseCase.execute(businessId);
+      final business = await _businessDetailsUseCase.execute(businessId);
       // TODO map to BusinessDetailsUIModel instead of using the domain model
-      emit(BusinessDetailsSuccess(businesses));
+      emit(BusinessDetailsSuccess(business));
     } on Exception catch (e) {
       emit(BusinessDetailsError(e.toString())); // TODO
     }
