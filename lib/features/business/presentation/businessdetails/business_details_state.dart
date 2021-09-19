@@ -13,7 +13,7 @@ class BusinessDetailsLoading extends BusinessDetailsState {
 }
 
 class BusinessDetailsSuccess extends BusinessDetailsState {
-  final Business business;
+  final BusinessDetailsUiModel business;
 
   const BusinessDetailsSuccess(this.business);
 

@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:transparent_image/transparent_image.dart';
-import 'package:yelpexplorer/core/utils/business_helper.dart' as BusinessHelper;
-import 'package:yelpexplorer/features/business/domain/model/business.dart';
 import 'package:yelpexplorer/features/business/presentation/businessdetails/business_details_screen.dart';
 import 'package:yelpexplorer/features/business/presentation/businesslist/business_list_bloc.dart';
+import 'package:yelpexplorer/features/business/presentation/businesslist/business_list_ui_model.dart';
 import 'package:yelpexplorer/features/business/presentation/widget/screen_loader.dart';
 
 class BusinessListScreen extends StatefulWidget {
@@ -57,21 +56,21 @@ class _BusinessListScreenState extends State<BusinessListScreen> {
 }
 
 class BusinessList extends StatelessWidget {
-  final List<Business> businessList;
+  final List<BusinessListUiModel> businesses;
 
-  BusinessList(this.businessList);
+  BusinessList(this.businesses);
 
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      itemBuilder: (context, index) => BusinessListItem(businessList[index], index + 1),
-      itemCount: businessList.length,
+      itemBuilder: (context, index) => BusinessListItem(businesses[index], index + 1),
+      itemCount: businesses.length,
     );
   }
 }
 
 class BusinessListItem extends StatelessWidget {
-  final Business business;
+  final BusinessListUiModel business;
   final int index;
   final double cardHeight = 100.0;
   final TextStyle textStyle = TextStyle(fontSize: 11.0);
@@ -127,7 +126,7 @@ class BusinessListItem extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Text(
-                        "$index. ${business.name.toUpperCase()}",
+                        "$index. ${business.name}",
                         style: TextStyle(fontWeight: FontWeight.bold),
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
@@ -135,7 +134,7 @@ class BusinessListItem extends StatelessWidget {
                       Row(
                         children: [
                           Image(
-                            image: BusinessHelper.getRatingImage(business.rating),
+                            image: business.ratingImage,
                             width: 82.0,
                             height: 14.0,
                           ),
@@ -149,7 +148,7 @@ class BusinessListItem extends StatelessWidget {
                         ],
                       ),
                       Text(
-                        BusinessHelper.formatPriceAndCategories(business.price, business.categories),
+                        business.priceAndCategories,
                         style: textStyle,
                       ),
                       Text(

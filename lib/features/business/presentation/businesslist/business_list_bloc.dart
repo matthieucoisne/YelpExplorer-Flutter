@@ -1,8 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
-import 'package:yelpexplorer/features/business/domain/model/business.dart';
 import 'package:yelpexplorer/features/business/domain/usecase/get_business_list_usecase.dart';
+import 'package:yelpexplorer/features/business/presentation/businesslist/business_list_ui_model.dart';
 
 part 'business_list_event.dart';
 part 'business_list_state.dart';
@@ -23,8 +23,7 @@ class BusinessListBloc extends Bloc<BusinessListEvent, BusinessListState> {
           event.sortBy,
           event.limit,
         );
-        // TODO map to BusinessUIModel instead of using the domain model
-        yield (BusinessListSuccess(businesses));
+        yield (BusinessListSuccess(businesses.toUiModels()));
       } on Exception catch (e) {
         yield (BusinessListError(e.toString())); // TODO
       }

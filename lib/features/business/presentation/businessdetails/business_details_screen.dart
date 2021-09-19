@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:transparent_image/transparent_image.dart';
-import 'package:yelpexplorer/core/utils/business_helper.dart' as BusinessHelper;
-import 'package:yelpexplorer/core/utils/const.dart' as Const;
 import 'package:yelpexplorer/core/utils/injection.dart' as injection;
-import 'package:yelpexplorer/features/business/domain/model/business.dart';
-import 'package:yelpexplorer/features/business/domain/model/review.dart';
 import 'package:yelpexplorer/features/business/presentation/businessdetails/business_details_cubit.dart';
+import 'package:yelpexplorer/features/business/presentation/businessdetails/business_details_ui_model.dart';
+import 'package:yelpexplorer/features/business/presentation/helper/business_helper.dart' as BusinessHelper;
 import 'package:yelpexplorer/features/business/presentation/widget/screen_loader.dart';
 
 class BusinessDetailsScreen extends StatefulWidget {
@@ -64,7 +62,7 @@ class _BusinessDetailsScreenState extends State<BusinessDetailsScreen> {
 }
 
 class BusinessDetails extends StatelessWidget {
-  final Business business;
+  final BusinessDetailsUiModel business;
   final double photoSize = 200.0;
 
   BusinessDetails(this.business);
@@ -88,8 +86,8 @@ class BusinessDetails extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               BusinessInfo(business),
-              OpeningHours(business.hours), // TODO UiModel
-              ReviewList(business.reviews), // TODO UiModel
+              OpeningHours(business.hours),
+              ReviewList(business.reviews),
             ],
           ),
         ],
@@ -99,7 +97,7 @@ class BusinessDetails extends StatelessWidget {
 }
 
 class BusinessInfo extends StatelessWidget {
-  final Business business;
+  final BusinessDetailsUiModel business;
   final TextStyle textStyle = TextStyle(fontSize: 13.0);
 
   BusinessInfo(this.business);
@@ -114,7 +112,7 @@ class BusinessInfo extends StatelessWidget {
           Container(
             margin: EdgeInsets.only(top: 12.0, bottom: 12.0),
             child: Text(
-              business.name.toUpperCase(),
+              business.name,
               style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
               overflow: TextOverflow.ellipsis,
               maxLines: 1,
@@ -123,7 +121,7 @@ class BusinessInfo extends StatelessWidget {
           Row(
             children: [
               Image(
-                image: BusinessHelper.getRatingImage(business.rating),
+                image: business.ratingImage,
                 width: 82.0,
                 height: 14.0,
               ),
@@ -139,7 +137,7 @@ class BusinessInfo extends StatelessWidget {
           Container(
             margin: EdgeInsets.only(top: 8.0),
             child: Text(
-              BusinessHelper.formatPriceAndCategories(business.price, business.categories),
+              business.priceAndCategories,
               style: textStyle,
             ),
           ),
@@ -159,21 +157,21 @@ class BusinessInfo extends StatelessWidget {
 }
 
 class OpeningHours extends StatelessWidget {
-  final Map<int, List<String>> businessHours;
+  final Map<int, List<String>> hours;
 
-  OpeningHours(this.businessHours);
+  OpeningHours(this.hours);
 
   @override
   Widget build(BuildContext context) {
     final List<TableRow> tableRows = [];
-    for (int i = 0; i < Const.days.length; i++) {
-      final List<String>? hoursOfDay = businessHours[i];
+    for (int i = 0; i < BusinessHelper.days.length; i++) {
+      final List<String>? hoursOfDay = hours[i];
 
-      String hours;
+      String businessHours;
       if (hoursOfDay != null) {
-        hours = hoursOfDay.join("\n");
+        businessHours = hoursOfDay.join("\n");
       } else {
-        hours = "Closed";
+        businessHours = "Closed";
       }
 
       tableRows.add(
@@ -182,13 +180,13 @@ class OpeningHours extends StatelessWidget {
             Container(
               margin: const EdgeInsets.only(top: 4.0),
               child: Text(
-                Const.days[i]!,
+                BusinessHelper.days[i]!,
                 style: TextStyle(fontSize: 13.0, fontWeight: FontWeight.bold),
               ),
             ),
             Container(
               margin: const EdgeInsets.only(left: 16.0, top: 4.0),
-              child: Text(hours, style: TextStyle(fontSize: 13.0)),
+              child: Text(businessHours, style: TextStyle(fontSize: 13.0)),
             ),
           ],
         ),
@@ -218,7 +216,7 @@ class OpeningHours extends StatelessWidget {
 }
 
 class ReviewList extends StatelessWidget {
-  final List<Review> reviews;
+  final List<ReviewUiModel> reviews;
 
   ReviewList(this.reviews);
 
@@ -230,7 +228,7 @@ class ReviewList extends StatelessWidget {
         Container(
           margin: EdgeInsets.fromLTRB(8.0, 26.0, 8.0, 4.0),
           child: Text(
-            "Latest reviews",
+            "Latest Reviews",
             style: TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold),
           ),
         ),
@@ -246,7 +244,7 @@ class ReviewList extends StatelessWidget {
 }
 
 class ReviewListItem extends StatelessWidget {
-  final Review review;
+  final ReviewUiModel review;
   final double userImageSize = 44.0;
 
   ReviewListItem(this.review);
@@ -290,7 +288,7 @@ class ReviewListItem extends StatelessWidget {
                         child: Row(
                           children: [
                             Image(
-                              image: BusinessHelper.getRatingImage(review.rating),
+                              image: review.ratingImage,
                               width: 82.0,
                               height: 14.0,
                             ),
