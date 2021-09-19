@@ -1,6 +1,6 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/mockito.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:yelpexplorer/features/business/domain/model/business.dart';
 import 'package:yelpexplorer/features/business/domain/model/review.dart';
 import 'package:yelpexplorer/features/business/domain/model/user.dart';
@@ -11,8 +11,8 @@ import 'package:yelpexplorer/features/business/presentation/businessdetails/busi
 class MockGetBusinessDetailsUseCase extends Mock implements GetBusinessDetailsUseCaseImpl {}
 
 void main() {
-  BusinessDetailsCubit cubit;
-  GetBusinessDetailsUseCase mockUseCase;
+  late BusinessDetailsCubit cubit;
+  late GetBusinessDetailsUseCase mockUseCase;
 
   final String businessId = "businessId";
   final Review fakeReview = Review(
@@ -34,7 +34,7 @@ void main() {
     address: "address",
     price: "price",
     categories: ["category"],
-    hours: null,
+    hours: {},
     reviews: fakeReviews,
   );
   final String errorMessage = "error";
@@ -54,7 +54,7 @@ void main() {
   blocTest<BusinessDetailsCubit, BusinessDetailsState>(
     "should emit BusinessDetailsSuccess in response to calling GetBusinessDetails",
     build: () {
-      when(mockUseCase.execute(any)).thenAnswer((_) async => fakeBusiness);
+      when(() => mockUseCase.execute(any())).thenAnswer((_) async => fakeBusiness);
       return cubit;
     },
     act: (cubit) async {
@@ -69,7 +69,7 @@ void main() {
   blocTest<BusinessDetailsCubit, BusinessDetailsState>(
     "should emit BusinessDetailsError when there is an exception",
     build: () {
-      when(mockUseCase.execute(any)).thenThrow(Exception(errorMessage));
+      when(() => mockUseCase.execute(any())).thenThrow(Exception(errorMessage));
       return cubit;
     },
     act: (cubit) async {

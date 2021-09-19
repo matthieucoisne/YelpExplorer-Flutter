@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/mockito.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:yelpexplorer/features/business/data/rest/datasource/remote/business_rest_datasource.dart';
 import 'package:yelpexplorer/features/business/data/rest/model/business_rest_model.dart';
 import 'package:yelpexplorer/features/business/data/rest/model/review_rest_model.dart';
@@ -13,8 +13,8 @@ import 'package:yelpexplorer/features/business/domain/repository/business_reposi
 class MockBusinessRestDataSource extends Mock implements BusinessRestDataSource {}
 
 void main() {
-  BusinessRepository repository;
-  BusinessRestDataSource mockRemoteDataSource;
+  late BusinessRepository repository;
+  late BusinessRestDataSource mockRemoteDataSource;
 
   // Data
   final BusinessRestModel fakeBusinessRestModel = BusinessRestModel(
@@ -58,7 +58,7 @@ void main() {
     hours: {
       1: ["4:00 pm - 11:00 pm"]
     },
-    reviews: null,
+    reviews: [],
   );
   final List<Business> fakeBusinesses = [fakeBusiness, fakeBusiness];
   final Review fakeReview = Review(
@@ -86,7 +86,7 @@ void main() {
       final String location = "montreal";
       final String sortBy = "rating";
       final int limit = 20;
-      when(mockRemoteDataSource.getBusinessList(any, any, any, any)).thenAnswer(
+      when(() => mockRemoteDataSource.getBusinessList(any(), any(), any(), any())).thenAnswer(
         (_) async => fakeBusinessListRestModel,
       );
 
@@ -95,7 +95,7 @@ void main() {
 
       // Assert
       expect(result, fakeBusinesses);
-      verify(mockRemoteDataSource.getBusinessList(term, location, sortBy, limit));
+      verify(() => mockRemoteDataSource.getBusinessList(term, location, sortBy, limit));
       verifyNoMoreInteractions(mockRemoteDataSource);
     },
   );
@@ -105,10 +105,10 @@ void main() {
     () async {
       // Arrange
       final String businessId = "businessId";
-      when(mockRemoteDataSource.getBusinessDetails(any)).thenAnswer(
+      when(() => mockRemoteDataSource.getBusinessDetails(any())).thenAnswer(
         (_) async => fakeBusinessRestModel,
       );
-      when(mockRemoteDataSource.getBusinessReviews(any)).thenAnswer(
+      when(() => mockRemoteDataSource.getBusinessReviews(any())).thenAnswer(
         (_) async => fakeReviewListRestModel,
       );
 
@@ -117,8 +117,8 @@ void main() {
 
       // Assert
       expect(result, fakeBusinessWithReviews);
-      verify(mockRemoteDataSource.getBusinessDetails(businessId));
-      verify(mockRemoteDataSource.getBusinessReviews(businessId));
+      verify(() => mockRemoteDataSource.getBusinessDetails(businessId));
+      verify(() => mockRemoteDataSource.getBusinessReviews(businessId));
       verifyNoMoreInteractions(mockRemoteDataSource);
     },
   );

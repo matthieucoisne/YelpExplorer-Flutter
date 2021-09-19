@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart';
-import 'package:mockito/mockito.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:yelpexplorer/core/utils/const.dart' as Const;
 import 'package:yelpexplorer/core/utils/injection.dart';
 import 'package:yelpexplorer/core/utils/network.dart';
@@ -15,8 +15,8 @@ import '../../../../../fixture/fixture_reader.dart';
 class MockHttpClient extends Mock implements YelpHttpClient {}
 
 void main() {
-  BusinessRestDataSource remoteDataSource;
-  MockHttpClient mockHttpClient;
+  late BusinessRestDataSource remoteDataSource;
+  late MockHttpClient mockHttpClient;
 
   getIt.registerSingleton("fakeApiKey", instanceName: Const.NAMED_API_KEY);
 
@@ -25,15 +25,19 @@ void main() {
     remoteDataSource = BusinessRestDataSource(mockHttpClient);
   });
 
+  setUpAll(() {
+    registerFallbackValue(Uri(host: "mocktail"));
+  });
+
   void setUpMockHttpClientSuccess200(String filename) {
-    when(mockHttpClient.get(any, headers: anyNamed("headers"))).thenAnswer(
+    when(() => mockHttpClient.get(any(), headers: any(named: "headers"))).thenAnswer(
       (_) async => Response(fixture(filename), 200),
     );
   }
 
   // TODO
   void setUpMockHttpClientFailure500() {
-    when(mockHttpClient.get(any, headers: anyNamed("headers"))).thenAnswer(
+    when(() => mockHttpClient.get(any(), headers: any(named: "headers"))).thenAnswer(
       (_) async => Response("Something went wrong", 500),
     );
   }
@@ -52,7 +56,7 @@ void main() {
 
       // Assert
       expect(result, businessListDataModel);
-      verify(mockHttpClient.get(any, headers: anyNamed("headers")));
+      verify(() => mockHttpClient.get(any(), headers: any(named: "headers")));
       verifyNoMoreInteractions(mockHttpClient);
     },
   );
@@ -71,7 +75,7 @@ void main() {
 
       // Assert
       expect(result, businessDataModel);
-      verify(mockHttpClient.get(any, headers: anyNamed("headers")));
+      verify(() => mockHttpClient.get(any(), headers: any(named: "headers")));
       verifyNoMoreInteractions(mockHttpClient);
     },
   );
@@ -90,7 +94,7 @@ void main() {
 
       // Assert
       expect(result, reviewListDataModel);
-      verify(mockHttpClient.get(any, headers: anyNamed("headers")));
+      verify(() => mockHttpClient.get(any(), headers: any(named: "headers")));
       verifyNoMoreInteractions(mockHttpClient);
     },
   );
