@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:transparent_image/transparent_image.dart';
-import 'package:yelpexplorer/core/utils/injection.dart' as injection;
+import 'package:yelpexplorer/core/const.dart' as Const;
+import 'package:yelpexplorer/core/injection.dart' as Injection;
 import 'package:yelpexplorer/features/business/presentation/businessdetails/business_details_cubit.dart';
 import 'package:yelpexplorer/features/business/presentation/businessdetails/business_details_ui_model.dart';
-import 'package:yelpexplorer/features/business/presentation/helper/business_helper.dart' as BusinessHelper;
 import 'package:yelpexplorer/features/business/presentation/widget/screen_loader.dart';
 
 class BusinessDetailsScreen extends StatefulWidget {
@@ -21,7 +21,7 @@ class _BusinessDetailsScreenState extends State<BusinessDetailsScreen> {
   // Here I am using a cubit but could have used a BLoC
   // I could have used `BlocProvider.of<BusinessDetailsCubit>(context)` instead of using getIt
   // Only if the previous screen is pushing a route wrapped in a `BlocProvider`
-  final BusinessDetailsCubit businessDetailsCubit = injection.getIt<BusinessDetailsCubit>();
+  final BusinessDetailsCubit businessDetailsCubit = Injection.getIt<BusinessDetailsCubit>();
 
   @override
   void initState() {
@@ -74,7 +74,7 @@ class BusinessDetails extends StatelessWidget {
         children: [
           FadeInImage.memoryNetwork(
             placeholder: kTransparentImage,
-            image: business.imageUrl,
+            image: business.photoUrl,
             height: photoSize,
             fit: BoxFit.cover,
             imageErrorBuilder: (context, url, error) => Image(
@@ -164,7 +164,7 @@ class OpeningHours extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final List<TableRow> tableRows = [];
-    for (int i = 0; i < BusinessHelper.days.length; i++) {
+    for (int i = 0; i < Const.days.length; i++) {
       final List<String>? hoursOfDay = hours[i];
 
       String businessHours;
@@ -180,7 +180,7 @@ class OpeningHours extends StatelessWidget {
             Container(
               margin: const EdgeInsets.only(top: 4.0),
               child: Text(
-                BusinessHelper.days[i]!,
+                Const.days[i]!,
                 style: TextStyle(fontSize: 13.0, fontWeight: FontWeight.bold),
               ),
             ),
@@ -264,7 +264,7 @@ class ReviewListItem extends StatelessWidget {
               children: [
                 FadeInImage.memoryNetwork(
                   placeholder: kTransparentImage,
-                  image: review.user.imageUrl,
+                  image: review.user.photoUrl,
                   width: userImageSize,
                   height: userImageSize,
                   fit: BoxFit.cover,

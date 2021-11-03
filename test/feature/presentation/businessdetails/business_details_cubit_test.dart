@@ -7,7 +7,7 @@ import 'package:yelpexplorer/features/business/domain/model/user.dart';
 import 'package:yelpexplorer/features/business/domain/usecase/get_business_details_usecase.dart';
 import 'package:yelpexplorer/features/business/domain/usecase/get_business_details_usecase_impl.dart';
 import 'package:yelpexplorer/features/business/presentation/businessdetails/business_details_cubit.dart';
-import 'package:yelpexplorer/features/business/presentation/businessdetails/business_details_ui_model.dart';
+import 'package:yelpexplorer/features/business/presentation/businessdetails/business_details_mapper.dart';
 
 class MockGetBusinessDetailsUseCase extends Mock implements GetBusinessDetailsUseCaseImpl {}
 
@@ -19,7 +19,7 @@ void main() {
   final Review fakeReview = Review(
     user: User(
       name: "name",
-      imageUrl: "imageUrl",
+      photoUrl: "photoUrl",
     ),
     text: "text",
     rating: 5,
@@ -29,7 +29,7 @@ void main() {
   final Business fakeBusiness = Business(
     id: "id",
     name: "name",
-    imageUrl: "imageUrl",
+    photoUrl: "photoUrl",
     rating: 4.5,
     reviewCount: 1337,
     address: "address",

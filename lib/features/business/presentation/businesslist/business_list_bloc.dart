@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:yelpexplorer/features/business/domain/usecase/get_business_list_usecase.dart';
+import 'package:yelpexplorer/features/business/presentation/businesslist/business_list_mapper.dart';
 import 'package:yelpexplorer/features/business/presentation/businesslist/business_list_ui_model.dart';
 
 part 'business_list_event.dart';

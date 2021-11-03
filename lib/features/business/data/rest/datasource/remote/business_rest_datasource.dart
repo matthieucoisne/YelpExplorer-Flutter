@@ -1,5 +1,5 @@
-import 'package:yelpexplorer/core/utils/const.dart' as Const;
-import 'package:yelpexplorer/core/utils/network.dart';
+import 'package:yelpexplorer/core/const.dart' as Const;
+import 'package:yelpexplorer/core/network.dart';
 import 'package:yelpexplorer/features/business/data/rest/model/business_rest_model.dart';
 import 'package:yelpexplorer/features/business/data/rest/model/review_rest_model.dart';
 

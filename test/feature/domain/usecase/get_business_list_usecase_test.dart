@@ -14,7 +14,7 @@ void main() {
   final Business fakeBusiness = Business(
     id: "id",
     name: "name",
-    imageUrl: "imageUrl",
+    photoUrl: "photoUrl",
     rating: 4.5,
     reviewCount: 1337,
     address: "address",
@@ -31,7 +31,7 @@ void main() {
   });
 
   test(
-    "should get the business list from the GetBusinessListGraphQLUseCase",
+    "should get the business list from the GetBusinessListCase",
     () async {
       // Arrange
       final String term = "sushi";

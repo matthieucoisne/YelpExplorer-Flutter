@@ -1,52 +1,10 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:yelpexplorer/features/business/domain/model/business.dart';
-import 'package:yelpexplorer/features/business/domain/model/review.dart';
-import 'package:yelpexplorer/features/business/domain/model/user.dart';
-import 'package:yelpexplorer/features/business/presentation/helper/business_helper.dart' as BusinessHelper;
-
-extension BusinessDetailUiMapper on Business {
-  BusinessDetailsUiModel toUiModel() {
-    return BusinessDetailsUiModel(
-      id: this.id,
-      name: this.name.toUpperCase(),
-      imageUrl: this.imageUrl,
-      ratingImage: BusinessHelper.getRatingImage(this.rating),
-      reviewCount: this.reviewCount,
-      address: this.address,
-      priceAndCategories: BusinessHelper.formatPriceAndCategories(this.price, this.categories),
-      hours: this.hours,
-      reviews: this.reviews.toUiModel(),
-    );
-  }
-}
-
-extension ReviewUiMapper on List<Review> {
-  List<ReviewUiModel> toUiModel() {
-    return map(
-      (review) => ReviewUiModel(
-        user: review.user.toUiModel(),
-        text: review.text,
-        ratingImage: BusinessHelper.getRatingImage(review.rating),
-        timeCreated: review.timeCreated,
-      ),
-    ).toList();
-  }
-}
-
-extension UserUiMapper on User {
-  UserUiModel toUiModel() {
-    return UserUiModel(
-      name: this.name,
-      imageUrl: this.imageUrl,
-    );
-  }
-}
 
 class BusinessDetailsUiModel extends Equatable {
   final String id;
   final String name;
-  final String imageUrl;
+  final String photoUrl;
   final AssetImage ratingImage;
   final int reviewCount;
   final String address;
@@ -57,7 +15,7 @@ class BusinessDetailsUiModel extends Equatable {
   BusinessDetailsUiModel({
     required this.id,
     required this.name,
-    required this.imageUrl,
+    required this.photoUrl,
     required this.ratingImage,
     required this.reviewCount,
     required this.address,
@@ -67,7 +25,7 @@ class BusinessDetailsUiModel extends Equatable {
   });
 
   @override
-  List<Object> get props => [id, name, imageUrl, ratingImage, reviewCount, address, priceAndCategories, hours, reviews];
+  List<Object> get props => [id, name, photoUrl, ratingImage, reviewCount, address, priceAndCategories, hours, reviews];
 }
 
 class ReviewUiModel extends Equatable {
@@ -89,13 +47,13 @@ class ReviewUiModel extends Equatable {
 
 class UserUiModel extends Equatable {
   final String name;
-  final String imageUrl;
+  final String photoUrl;
 
   UserUiModel({
     required this.name,
-    required this.imageUrl,
+    required this.photoUrl,
   });
 
   @override
-  List<Object> get props => [name, imageUrl];
+  List<Object> get props => [name, photoUrl];
 }

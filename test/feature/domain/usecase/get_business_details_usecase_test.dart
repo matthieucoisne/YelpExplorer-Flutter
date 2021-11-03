@@ -16,7 +16,7 @@ void main() {
   final Review fakeReview = Review(
     user: User(
       name: "name",
-      imageUrl: "imageUrl",
+      photoUrl: "photoUrl",
     ),
     text: "text",
     rating: 5,
@@ -26,7 +26,7 @@ void main() {
   final Business fakeBusiness = Business(
     id: "id",
     name: "name",
-    imageUrl: "imageUrl",
+    photoUrl: "photoUrl",
     rating: 4.5,
     reviewCount: 1337,
     address: "address",
@@ -42,7 +42,7 @@ void main() {
   });
 
   test(
-    "should get the business details from the GetBusinessDetailsGraphQLUseCase",
+    "should get the business details from the GetBusinessDetailsUseCase",
     () async {
       // Arrange
       final String businessId = "businessId";

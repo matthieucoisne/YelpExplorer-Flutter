@@ -42,7 +42,7 @@ class BusinessDetailsGraphQLModel extends Equatable {
 class BusinessGraphQLModel extends Equatable {
   final String id;
   final String name;
-  final String imageUrl;
+  final List<String> photos;
   final int reviewCount;
   final List<CategoryGraphQLModel> categories;
   final double rating;
@@ -54,7 +54,7 @@ class BusinessGraphQLModel extends Equatable {
   BusinessGraphQLModel({
     required this.id,
     required this.name,
-    required this.imageUrl,
+    required this.photos,
     required this.reviewCount,
     required this.categories,
     required this.rating,
@@ -65,7 +65,7 @@ class BusinessGraphQLModel extends Equatable {
   });
 
   @override
-  List<Object?> get props => [id, name, imageUrl, rating, reviewCount, location, price, categories, hours, reviews];
+  List<Object?> get props => [id, name, photos, rating, reviewCount, location, price, categories, hours, reviews];
 
   factory BusinessGraphQLModel.fromJson(Map<String, dynamic> json) {
     final List<dynamic> jsonCategories = json["categories"];
@@ -86,7 +86,7 @@ class BusinessGraphQLModel extends Equatable {
     return BusinessGraphQLModel(
       id: json["id"],
       name: json["name"],
-      imageUrl: json["photos"][0],
+      photos: List<String>.from(json["photos"]),
       reviewCount: json["review_count"],
       categories: categories,
       rating: json["rating"].toDouble(),

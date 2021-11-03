@@ -24,7 +24,7 @@ class BusinessListRestModel extends Equatable {
 class BusinessRestModel extends Equatable {
   final String id;
   final String name;
-  final String imageUrl;
+  final String photoUrl;
   final int reviewCount;
   final List<CategoryRestModel> categories;
   final double rating;
@@ -36,7 +36,7 @@ class BusinessRestModel extends Equatable {
   BusinessRestModel({
     required this.id,
     required this.name,
-    required this.imageUrl,
+    required this.photoUrl,
     required this.reviewCount,
     required this.categories,
     required this.rating,
@@ -47,7 +47,7 @@ class BusinessRestModel extends Equatable {
   });
 
   @override
-  List<Object?> get props => [id, name, imageUrl, rating, reviewCount, location, price, categories, hours, reviews];
+  List<Object?> get props => [id, name, photoUrl, rating, reviewCount, location, price, categories, hours, reviews];
 
   factory BusinessRestModel.fromJson(Map<String, dynamic> json) {
     final List<dynamic> jsonCategories = json["categories"];
@@ -63,7 +63,7 @@ class BusinessRestModel extends Equatable {
     return BusinessRestModel(
       id: json["id"],
       name: json["name"],
-      imageUrl: json["image_url"],
+      photoUrl: json["image_url"],
       reviewCount: json["review_count"],
       categories: categories,
       rating: json["rating"],

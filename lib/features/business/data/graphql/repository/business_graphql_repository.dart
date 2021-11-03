@@ -24,7 +24,7 @@ class BusinessGraphQLRepository implements BusinessRepository {
   @override
   Future<Business> getBusinessDetailsWithReviews(String businessId) async {
     // TODO add try/catch - return Resource<Business>
-    BusinessDetailsGraphQLModel response = await remoteDataSource.getBusinessDetails(businessId);
+    BusinessDetailsGraphQLModel response = await remoteDataSource.getBusinessDetailsWithReviews(businessId);
     return response.business.toDomainModel();
   }
 }

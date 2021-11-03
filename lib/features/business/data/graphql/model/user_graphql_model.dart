@@ -2,20 +2,20 @@ import 'package:equatable/equatable.dart';
 
 class UserGraphQLModel extends Equatable {
   final String name;
-  final String? imageUrl;
+  final String? photoUrl;
 
   UserGraphQLModel({
     required this.name,
-    required this.imageUrl,
+    required this.photoUrl,
   });
 
   @override
-  List<Object?> get props => [name, imageUrl];
+  List<Object?> get props => [name, photoUrl];
 
   factory UserGraphQLModel.fromJson(Map<String, dynamic> json) {
     return UserGraphQLModel(
       name: json["name"],
-      imageUrl: json["image_url"],
+      photoUrl: json["image_url"],
     );
   }
 }

@@ -1,6 +1,6 @@
 import "package:collection/collection.dart";
 import 'package:intl/intl.dart';
-import 'package:yelpexplorer/core/utils/const.dart' as Const;
+import 'package:yelpexplorer/core/const.dart' as Const;
 import 'package:yelpexplorer/features/business/data/graphql/model/business_graphql_model.dart';
 import 'package:yelpexplorer/features/business/domain/model/business.dart';
 import 'package:yelpexplorer/features/business/domain/model/review.dart';
@@ -44,30 +44,30 @@ extension BusinessGraphQLMapper on BusinessGraphQLModel {
       }
     }
 
-    final List<Review>? reviews = this.reviews?.map((review) {
+    final List<Review> reviews = this.reviews?.map((review) {
       final User user = User(
         name: review.user.name,
-        imageUrl: review.user.imageUrl ?? "",
+        photoUrl: review.user.photoUrl ?? "",
       );
       return Review(
         user: user,
         text: review.text,
         rating: review.rating,
-        timeCreated: review.timeCreated.toString().substring(0, 10),
+        timeCreated: review.timeCreated.substring(0, 10),
       );
-    }).toList();
+    }).toList() ?? [];
 
     return Business(
       id: this.id,
       name: this.name,
-      imageUrl: this.imageUrl,
+      photoUrl: this.photos[0],
       rating: this.rating,
       reviewCount: this.reviewCount,
       address: "${this.location.address}, ${this.location.city}",
       price: this.price ?? "",
       categories: categories,
       hours: hours,
-      reviews: reviews ?? [],
+      reviews: reviews,
     );
   }
 }

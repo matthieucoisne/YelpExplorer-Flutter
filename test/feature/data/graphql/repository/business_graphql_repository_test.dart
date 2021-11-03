@@ -20,7 +20,7 @@ void main() {
   final ReviewGraphQLModel fakeReviewGraphQLModel = ReviewGraphQLModel(
     user: UserGraphQLModel(
       name: "name",
-      imageUrl: "imageUrl",
+      photoUrl: "photoUrl",
     ),
     text: "text",
     rating: 5,
@@ -34,7 +34,7 @@ void main() {
   final BusinessGraphQLModel fakeBusinessGraphQLModel = BusinessGraphQLModel(
     id: "id",
     name: "name",
-    imageUrl: "imageUrl",
+    photos: ["http://photo1"],
     rating: 4.5,
     reviewCount: 1337,
     location: LocationGraphQLModel(address: "address", city: "city"),
@@ -57,7 +57,7 @@ void main() {
   final Review fakeReview = Review(
     user: User(
       name: "name",
-      imageUrl: "imageUrl",
+      photoUrl: "photoUrl",
     ),
     text: "text",
     rating: 5,
@@ -67,7 +67,7 @@ void main() {
   final Business fakeBusiness = Business(
     id: "id",
     name: "name",
-    imageUrl: "imageUrl",
+    photoUrl: "http://photo1",
     rating: 4.5,
     reviewCount: 1337,
     address: "address, city",
@@ -112,7 +112,7 @@ void main() {
     () async {
       // Arrange
       final String businessId = "businessId";
-      when(() => mockRemoteDataSource.getBusinessDetails(any())).thenAnswer(
+      when(() => mockRemoteDataSource.getBusinessDetailsWithReviews(any())).thenAnswer(
         (_) async => fakeBusinessDetailsGraphQLModel,
       );
 
@@ -121,7 +121,7 @@ void main() {
 
       // Assert
       expect(result, fakeBusiness);
-      verify(() => mockRemoteDataSource.getBusinessDetails(businessId));
+      verify(() => mockRemoteDataSource.getBusinessDetailsWithReviews(businessId));
       verifyNoMoreInteractions(mockRemoteDataSource);
     },
   );

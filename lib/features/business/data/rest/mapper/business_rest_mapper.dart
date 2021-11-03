@@ -1,6 +1,6 @@
 import "package:collection/collection.dart";
 import 'package:intl/intl.dart';
-import 'package:yelpexplorer/core/utils/const.dart' as Const;
+import 'package:yelpexplorer/core/const.dart' as Const;
 import 'package:yelpexplorer/features/business/data/rest/model/business_rest_model.dart';
 import 'package:yelpexplorer/features/business/domain/model/business.dart';
 
@@ -45,7 +45,7 @@ extension BusinessMapper on BusinessRestModel {
     return Business(
       id: this.id,
       name: this.name,
-      imageUrl: this.imageUrl,
+      photoUrl: this.photoUrl,
       rating: this.rating,
       reviewCount: this.reviewCount,
       address: "${this.location.address}, ${this.location.city}",

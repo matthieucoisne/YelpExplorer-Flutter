@@ -20,7 +20,7 @@ void main() {
   final BusinessRestModel fakeBusinessRestModel = BusinessRestModel(
     id: "id",
     name: "name",
-    imageUrl: "imageUrl",
+    photoUrl: "photoUrl",
     rating: 4.5,
     reviewCount: 1337,
     location: LocationRestModel(address: "address", city: "city"),
@@ -36,7 +36,7 @@ void main() {
   final ReviewRestModel fakeReviewRestModel = ReviewRestModel(
     user: UserRestModel(
       name: "name",
-      imageUrl: "imageUrl",
+      photoUrl: "photoUrl",
     ),
     text: "text",
     rating: 5,
@@ -49,7 +49,7 @@ void main() {
   final Business fakeBusiness = Business(
     id: "id",
     name: "name",
-    imageUrl: "imageUrl",
+    photoUrl: "photoUrl",
     rating: 4.5,
     reviewCount: 1337,
     address: "address, city",
@@ -64,7 +64,7 @@ void main() {
   final Review fakeReview = Review(
     user: User(
       name: "name",
-      imageUrl: "imageUrl",
+      photoUrl: "photoUrl",
     ),
     text: "text",
     rating: 5,

@@ -3,12 +3,13 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:yelpexplorer/features/business/domain/model/business.dart';
 import 'package:yelpexplorer/features/business/domain/model/review.dart';
 import 'package:yelpexplorer/features/business/domain/model/user.dart';
+import 'package:yelpexplorer/features/business/presentation/businessdetails/business_details_mapper.dart';
 import 'package:yelpexplorer/features/business/presentation/businessdetails/business_details_ui_model.dart';
 
 void main() {
   final User fakeUser = User(
     name: "name",
-    imageUrl: "imageUrl",
+    photoUrl: "photoUrl",
   );
 
   final Review fakeReview = Review(
@@ -21,7 +22,7 @@ void main() {
   final Business fakeBusiness = Business(
     id: "id",
     name: "name",
-    imageUrl: "imageUrl",
+    photoUrl: "photoUrl",
     rating: 4.5,
     reviewCount: 1337,
     address: "address",
@@ -36,7 +37,7 @@ void main() {
 
   final UserUiModel fakeUserUiModel = UserUiModel(
     name: "name",
-    imageUrl: "imageUrl",
+    photoUrl: "photoUrl",
   );
 
   final ReviewUiModel fakeReviewUiModel = ReviewUiModel(
@@ -49,7 +50,7 @@ void main() {
   final BusinessDetailsUiModel fakeBusinessDetailsUiModel = BusinessDetailsUiModel(
     id: "id",
     name: "NAME",
-    imageUrl: "imageUrl",
+    photoUrl: "photoUrl",
     ratingImage: AssetImage("assets/stars_small_4_half.png"),
     reviewCount: 1337,
     address: "address",

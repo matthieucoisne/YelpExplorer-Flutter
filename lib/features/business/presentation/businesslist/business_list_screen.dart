@@ -35,7 +35,7 @@ class _BusinessListScreenState extends State<BusinessListScreen> {
       body: BlocConsumer<BusinessListBloc, BusinessListState>(
         listener: (context, state) {
           if (state is BusinessListError) {
-            Scaffold.of(context).showSnackBar(
+            ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text(state.error)),
             );
           }
@@ -63,7 +63,7 @@ class BusinessList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      itemBuilder: (context, index) => BusinessListItem(businesses[index], index + 1),
+      itemBuilder: (context, index) => BusinessListItem(businesses[index]),
       itemCount: businesses.length,
     );
   }
@@ -71,11 +71,10 @@ class BusinessList extends StatelessWidget {
 
 class BusinessListItem extends StatelessWidget {
   final BusinessListUiModel business;
-  final int index;
   final double cardHeight = 100.0;
   final TextStyle textStyle = TextStyle(fontSize: 11.0);
 
-  BusinessListItem(this.business, this.index);
+  BusinessListItem(this.business);
 
   void _navigateToDetails(BuildContext context) {
     Navigator.push(
@@ -107,7 +106,7 @@ class BusinessListItem extends StatelessWidget {
                 ),
                 child: FadeInImage.memoryNetwork(
                   placeholder: kTransparentImage,
-                  image: business.imageUrl,
+                  image: business.photoUrl,
                   width: cardHeight,
                   height: cardHeight,
                   fit: BoxFit.cover,
@@ -126,7 +125,7 @@ class BusinessListItem extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Text(
-                        "$index. ${business.name}",
+                        business.name,
                         style: TextStyle(fontWeight: FontWeight.bold),
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,

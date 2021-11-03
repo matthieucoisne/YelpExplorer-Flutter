@@ -2,16 +2,16 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
-import 'package:http/http.dart' as http;
-import 'package:yelpexplorer/core/utils/const.dart' as Const;
-import 'package:yelpexplorer/core/utils/injection.dart';
+import 'package:http/http.dart' as Http;
+import 'package:yelpexplorer/core/const.dart' as Const;
+import 'package:yelpexplorer/core/injection.dart';
 
 // Custom Http Client used for both REST and GraphQL
 // Configured to work with the Yelp API
-class YelpHttpClient extends http.BaseClient {
-  final http.Client client = http.Client();
+class YelpHttpClient extends Http.BaseClient {
+  final Http.Client client = Http.Client();
 
-  Future<http.StreamedResponse> send(http.BaseRequest request) {
+  Future<Http.StreamedResponse> send(Http.BaseRequest request) {
     request.headers['Authorization'] = "Bearer ${getIt<String>(instanceName: Const.NAMED_API_KEY)}";
     request.headers['content-type'] = "application/json";
     request.headers['accept-language'] = "en_US";
@@ -21,7 +21,7 @@ class YelpHttpClient extends http.BaseClient {
 
 extension HttpClientExtension on YelpHttpClient {
   Future<T> getData<T>(String url, T Function(dynamic) fn) async {
-    http.Response response;
+    Http.Response response;
     try {
       response = await this.get(Uri.parse(url));
       if (kDebugMode) {

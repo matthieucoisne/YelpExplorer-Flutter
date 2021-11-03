@@ -76,7 +76,7 @@ void main() {
       final BusinessDetailsGraphQLModel businessDetailsDataModel = BusinessDetailsGraphQLModel.fromJson(json);
 
       // Act
-      final result = await remoteDataSource.getBusinessDetails(businessId);
+      final result = await remoteDataSource.getBusinessDetailsWithReviews(businessId);
 
       // Assert
       QueryOptions actualQueryOption = verify(() => mockGraphQLClient.query(captureAny())).captured.first as QueryOptions;

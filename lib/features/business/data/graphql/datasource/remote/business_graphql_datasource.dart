@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
-import 'package:yelpexplorer/core/utils/network.dart';
+import 'package:yelpexplorer/core/network.dart';
 import 'package:yelpexplorer/features/business/data/graphql/model/business_graphql_model.dart';
 
 class BusinessGraphQLDataSource {
@@ -23,7 +23,7 @@ class BusinessGraphQLDataSource {
     return BusinessListGraphQLModel.fromJson(json);
   }
 
-  Future<BusinessDetailsGraphQLModel> getBusinessDetails(String businessId) async {
+  Future<BusinessDetailsGraphQLModel> getBusinessDetailsWithReviews(String businessId) async {
     // TODO add try/catch
     final QueryResult queryResult = await client.getData(QueryOptions(
       document: Queries.businessDetailsQuery,

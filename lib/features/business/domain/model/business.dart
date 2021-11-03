@@ -4,7 +4,7 @@ import 'package:yelpexplorer/features/business/domain/model/review.dart';
 class Business extends Equatable {
   final String id;
   final String name;
-  final String imageUrl;
+  final String photoUrl;
   final double rating;
   final int reviewCount;
   final String address;
@@ -16,7 +16,7 @@ class Business extends Equatable {
   Business({
     required this.id,
     required this.name,
-    required this.imageUrl,
+    required this.photoUrl,
     required this.rating,
     required this.reviewCount,
     required this.address,
@@ -27,7 +27,7 @@ class Business extends Equatable {
   });
 
   @override
-  List<Object> get props => [id, name, imageUrl, rating, reviewCount, address, price, categories, hours, reviews];
+  List<Object> get props => [id, name, photoUrl, rating, reviewCount, address, price, categories, hours, reviews];
 
   Business copyWith({
     required List<Review> reviews,
@@ -35,7 +35,7 @@ class Business extends Equatable {
     return Business(
       id: this.id,
       name: this.name,
-      imageUrl: this.imageUrl,
+      photoUrl: this.photoUrl,
       rating: this.rating,
       reviewCount: this.reviewCount,
       address: this.address,

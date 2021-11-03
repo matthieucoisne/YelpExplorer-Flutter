@@ -33,7 +33,7 @@ class BusinessRestRepository implements BusinessRepository {
     ReviewListRestModel reviewListRestModel = await futureReviewListRestModel;
 
     Business business = businessRestModel.toDomainModel();
-    List<Review> reviews = reviewListRestModel.reviews.toDomainModel();
+    List<Review> reviews = reviewListRestModel.reviews.toDomainModels();
 
     return business.copyWith(reviews: reviews);
   }
