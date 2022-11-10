@@ -42,7 +42,7 @@ void main() {
       );
       final Map<String, dynamic> json = jsonDecode(fixture("graphql/getBusinessList.json"))["data"];
       when(() => mockGraphQLClient.query(any())).thenAnswer(
-        (_) async => QueryResult(source: QueryResultSource.network, data: json),
+        (_) async => QueryResult(options: expectedQueryOptions, source: QueryResultSource.network, data: json),
       );
       final BusinessListGraphQLModel businessListDataModel = BusinessListGraphQLModel.fromJson(json);
 
@@ -71,7 +71,7 @@ void main() {
       );
       final Map<String, dynamic> json = jsonDecode(fixture("graphql/getBusinessDetails.json"))["data"];
       when(() => mockGraphQLClient.query(any())).thenAnswer(
-        (_) async => QueryResult(source: QueryResultSource.network, data: json),
+        (_) async => QueryResult(options: expectedQueryOptions, source: QueryResultSource.network, data: json),
       );
       final BusinessDetailsGraphQLModel businessDetailsDataModel = BusinessDetailsGraphQLModel.fromJson(json);
 
