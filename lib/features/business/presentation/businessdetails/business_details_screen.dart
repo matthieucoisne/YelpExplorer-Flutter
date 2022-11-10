@@ -40,7 +40,7 @@ class _BusinessDetailsScreenState extends State<BusinessDetailsScreen> {
         child: BlocConsumer<BusinessDetailsCubit, BusinessDetailsState>(
           listener: (context, state) {
             if (state is BusinessDetailsError) {
-              Scaffold.of(context).showSnackBar(
+              ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(content: Text(state.error)),
               );
             }
